@@ -1,0 +1,1013 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Digital Transformation & CXM — Course Portal</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --teal:       #1a6b72;
+  --teal-dark:  #0e4449;
+  --teal-mid:   #256b72;
+  --teal-light: #d6edef;
+  --teal-xlight:#eef7f8;
+  --gold:       #c8a84b;
+  --gold-light: #f5ead0;
+  --cream:      #faf6ef;
+  --paper:      #fffdf9;
+  --ink:        #181818;
+  --muted:      #6b6b6b;
+  --border:     #ddd6c5;
+  --white:      #ffffff;
+  --shadow-sm:  0 1px 4px rgba(0,0,0,.08);
+  --shadow-md:  0 4px 24px rgba(0,0,0,.12);
+  --shadow-lg:  0 12px 48px rgba(0,0,0,.18);
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--cream);
+  color: var(--ink);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* ── HERO ───────────────────────────────────────────────── */
+.hero {
+  background: var(--teal-dark);
+  position: relative;
+  overflow: hidden;
+  padding: 72px 40px 64px;
+}
+.hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 80% 60% at 110% 40%, rgba(200,168,75,.18) 0%, transparent 60%),
+    radial-gradient(ellipse 50% 80% at -10% 80%, rgba(26,107,114,.5) 0%, transparent 60%),
+    repeating-linear-gradient(-45deg, transparent, transparent 22px, rgba(255,255,255,.018) 22px, rgba(255,255,255,.018) 44px);
+}
+.hero-inner {
+  max-width: 960px;
+  margin: 0 auto;
+  position: relative;
+}
+.hero-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(200,168,75,.18);
+  border: 1px solid rgba(200,168,75,.4);
+  color: var(--gold);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  padding: 5px 14px;
+  border-radius: 2px;
+  margin-bottom: 28px;
+}
+.hero-eyebrow svg { flex-shrink: 0; }
+.hero h1 {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(28px, 5vw, 48px);
+  font-weight: 700;
+  color: var(--white);
+  line-height: 1.18;
+  margin-bottom: 16px;
+  max-width: 700px;
+}
+.hero h1 em {
+  font-style: italic;
+  color: var(--gold);
+}
+.hero-sub {
+  color: rgba(255,255,255,.6);
+  font-size: 15px;
+  font-weight: 300;
+  max-width: 560px;
+  line-height: 1.7;
+  margin-bottom: 36px;
+}
+.hero-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 24px;
+}
+.hero-meta-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: rgba(255,255,255,.55);
+  font-size: 13px;
+}
+.hero-meta-item strong {
+  color: rgba(255,255,255,.85);
+  font-weight: 500;
+}
+.hero-meta-dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--gold);
+  flex-shrink: 0;
+}
+.hero-badge {
+  position: absolute;
+  top: 0; right: 0;
+  background: var(--gold);
+  color: var(--teal-dark);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  padding: 6px 14px;
+  border-radius: 0 0 0 6px;
+}
+
+/* ── PROGRESS BAR ───────────────────────────────────────── */
+.progress-bar {
+  height: 3px;
+  background: rgba(200,168,75,.15);
+  position: relative;
+}
+.progress-bar-fill {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, var(--teal), var(--gold));
+  transition: width .3s ease;
+}
+
+/* ── LAYOUT ─────────────────────────────────────────────── */
+.layout {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 48px 24px 80px;
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  gap: 32px;
+  align-items: start;
+}
+@media (max-width: 720px) {
+  .layout { grid-template-columns: 1fr; }
+  .sidebar { position: static !important; }
+}
+
+/* ── SIDEBAR ────────────────────────────────────────────── */
+.sidebar {
+  position: sticky;
+  top: 24px;
+}
+.sidebar-card {
+  background: var(--paper);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+}
+.sidebar-head {
+  background: var(--teal);
+  padding: 14px 18px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.sidebar-head h2 {
+  font-family: 'Playfair Display', serif;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--white);
+  letter-spacing: .02em;
+}
+.sidebar-count {
+  background: rgba(255,255,255,.15);
+  color: var(--white);
+  font-size: 11px;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: 10px;
+  font-family: 'DM Mono', monospace;
+}
+.sidebar-body { padding: 8px 0; max-height: 70vh; overflow-y: auto; }
+.sidebar-body::-webkit-scrollbar { width: 4px; }
+.sidebar-body::-webkit-scrollbar-track { background: transparent; }
+.sidebar-body::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+
+.module-group { margin-bottom: 4px; }
+.module-label {
+  font-size: 9.5px;
+  font-weight: 700;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--muted);
+  padding: 10px 18px 4px;
+}
+.toc-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 18px;
+  cursor: pointer;
+  border: none;
+  background: none;
+  width: 100%;
+  text-align: left;
+  border-left: 2px solid transparent;
+  transition: all .15s ease;
+  position: relative;
+}
+.toc-item:hover { background: var(--teal-xlight); border-left-color: var(--teal-light); }
+.toc-item.active { background: var(--teal-xlight); border-left-color: var(--teal); }
+.toc-item.active .toc-num { background: var(--teal); color: var(--white); }
+.toc-item.active .toc-text { color: var(--teal-dark); font-weight: 500; }
+.toc-num {
+  min-width: 22px; height: 22px;
+  border-radius: 50%;
+  background: var(--border);
+  color: var(--muted);
+  font-size: 10px;
+  font-family: 'DM Mono', monospace;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+  transition: all .15s;
+}
+.toc-text {
+  font-size: 12.5px;
+  color: #333;
+  line-height: 1.4;
+  transition: color .15s;
+}
+.toc-item .toc-arrow {
+  margin-left: auto;
+  color: var(--muted);
+  opacity: 0;
+  transition: opacity .15s;
+  flex-shrink: 0;
+}
+.toc-item:hover .toc-arrow, .toc-item.active .toc-arrow { opacity: 1; }
+
+/* ── MAIN CONTENT ───────────────────────────────────────── */
+.main {}
+.welcome-card {
+  background: var(--paper);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 40px;
+  text-align: center;
+  box-shadow: var(--shadow-sm);
+}
+.welcome-icon {
+  width: 64px; height: 64px;
+  background: var(--teal-xlight);
+  border: 2px solid var(--teal-light);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  margin: 0 auto 20px;
+}
+.welcome-card h2 {
+  font-family: 'Playfair Display', serif;
+  font-size: 22px;
+  color: var(--teal-dark);
+  margin-bottom: 10px;
+}
+.welcome-card p {
+  font-size: 14px;
+  color: var(--muted);
+  line-height: 1.7;
+  max-width: 400px;
+  margin: 0 auto;
+}
+.welcome-hint {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 20px;
+  background: var(--gold-light);
+  border: 1px solid rgba(200,168,75,.3);
+  color: #8a6f20;
+  font-size: 12px;
+  font-weight: 500;
+  padding: 6px 14px;
+  border-radius: 20px;
+}
+
+/* ── CONTENT PANEL ──────────────────────────────────────── */
+.content-panel {
+  display: none;
+  animation: panelIn .25s ease;
+}
+.content-panel.visible { display: block; }
+
+@keyframes panelIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.panel-header {
+  background: var(--paper);
+  border: 1px solid var(--border);
+  border-radius: 6px 6px 0 0;
+  padding: 24px 32px 20px;
+  border-bottom: none;
+}
+.panel-eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+.panel-num {
+  background: var(--teal);
+  color: var(--white);
+  font-size: 10px;
+  font-family: 'DM Mono', monospace;
+  font-weight: 500;
+  padding: 3px 9px;
+  border-radius: 3px;
+  letter-spacing: .05em;
+}
+.panel-module-tag {
+  font-size: 11px;
+  color: var(--muted);
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  font-weight: 600;
+}
+.panel-header h2 {
+  font-family: 'Playfair Display', serif;
+  font-size: 24px;
+  color: var(--teal-dark);
+  line-height: 1.3;
+  margin-bottom: 8px;
+}
+.panel-desc {
+  font-size: 13.5px;
+  color: var(--muted);
+  line-height: 1.65;
+}
+.panel-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 16px;
+  flex-wrap: wrap;
+}
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  background: var(--teal);
+  color: var(--white);
+  font-size: 12.5px;
+  font-weight: 600;
+  padding: 9px 18px;
+  border-radius: 4px;
+  border: none;
+  cursor: pointer;
+  text-decoration: none;
+  transition: background .15s;
+}
+.btn-primary:hover { background: var(--teal-dark); }
+.btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  background: var(--white);
+  color: var(--teal);
+  font-size: 12.5px;
+  font-weight: 600;
+  padding: 9px 18px;
+  border-radius: 4px;
+  border: 1.5px solid var(--teal-light);
+  cursor: pointer;
+  text-decoration: none;
+  transition: all .15s;
+}
+.btn-secondary:hover { background: var(--teal-xlight); border-color: var(--teal); }
+
+.panel-body {
+  background: var(--paper);
+  border: 1px solid var(--border);
+  border-radius: 0 0 6px 6px;
+  padding: 28px 32px 32px;
+  box-shadow: var(--shadow-sm);
+}
+.panel-iframe-wrap {
+  width: 100%;
+  background: var(--cream);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  overflow: hidden;
+  position: relative;
+}
+.panel-iframe-wrap iframe {
+  width: 100%;
+  height: 640px;
+  border: none;
+  display: block;
+}
+
+/* Loading state */
+.iframe-loader {
+  position: absolute;
+  inset: 0;
+  background: var(--cream);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  z-index: 2;
+  transition: opacity .3s ease;
+}
+.iframe-loader.hidden { opacity: 0; pointer-events: none; }
+.loader-ring {
+  width: 36px; height: 36px;
+  border: 3px solid var(--border);
+  border-top-color: var(--teal);
+  border-radius: 50%;
+  animation: spin .8s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+.loader-text {
+  font-size: 12px;
+  color: var(--muted);
+}
+
+/* Placeholder when no file yet */
+.placeholder-wrap {
+  background: var(--cream);
+  border: 1.5px dashed var(--border);
+  border-radius: 4px;
+  padding: 60px 32px;
+  text-align: center;
+}
+.placeholder-wrap h3 {
+  font-family: 'Playfair Display', serif;
+  font-size: 16px;
+  color: var(--teal-dark);
+  margin-bottom: 8px;
+}
+.placeholder-wrap p {
+  font-size: 13px;
+  color: var(--muted);
+  line-height: 1.65;
+  max-width: 380px;
+  margin: 0 auto;
+}
+.code-tag {
+  display: inline-block;
+  background: var(--teal-xlight);
+  border: 1px solid var(--teal-light);
+  color: var(--teal-dark);
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: 3px;
+  margin-top: 12px;
+}
+
+/* ── NAV ARROWS ─────────────────────────────────────────── */
+.nav-arrows {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 16px;
+}
+.nav-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--paper);
+  border: 1px solid var(--border);
+  color: var(--teal);
+  font-size: 12.5px;
+  font-weight: 500;
+  padding: 9px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all .15s;
+}
+.nav-btn:hover { background: var(--teal-xlight); border-color: var(--teal-light); }
+.nav-btn:disabled { opacity: .35; cursor: not-allowed; }
+
+/* ── SEARCH ─────────────────────────────────────────────── */
+.search-wrap {
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--border);
+  position: relative;
+}
+.search-wrap input {
+  width: 100%;
+  background: var(--cream);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 7px 10px 7px 32px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 12px;
+  color: var(--ink);
+  outline: none;
+  transition: border-color .15s;
+}
+.search-wrap input:focus { border-color: var(--teal); background: var(--white); }
+.search-wrap input::placeholder { color: var(--muted); }
+.search-icon {
+  position: absolute;
+  left: 22px; top: 50%;
+  transform: translateY(-50%);
+  color: var(--muted);
+  pointer-events: none;
+}
+
+/* ── MOBILE TOGGLE ──────────────────────────────────────── */
+.mobile-toc-toggle {
+  display: none;
+  width: 100%;
+  background: var(--teal);
+  color: var(--white);
+  border: none;
+  padding: 12px 20px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+  border-radius: 6px;
+}
+@media (max-width: 720px) {
+  .mobile-toc-toggle { display: flex; }
+  .sidebar { display: none; }
+  .sidebar.mobile-open { display: block; margin-bottom: 20px; }
+}
+
+/* ── FOOTER ─────────────────────────────────────────────── */
+.site-footer {
+  background: var(--teal-dark);
+  padding: 24px 40px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+.site-footer p {
+  color: rgba(255,255,255,.4);
+  font-size: 12px;
+}
+.site-footer a {
+  color: var(--gold);
+  text-decoration: none;
+  font-size: 12px;
+  font-weight: 500;
+  transition: opacity .15s;
+}
+.site-footer a:hover { opacity: .75; }
+
+/* ── SCROLLBAR ──────────────────────────────────────────── */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--cream); }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-badge">Udemy Course</div>
+  <div class="hero-inner">
+    <div class="hero-eyebrow">
+      <svg width="10" height="10" viewBox="0 0 10 10" fill="currentColor"><circle cx="5" cy="5" r="5"/></svg>
+      Business &amp; Technology · Management Studies
+    </div>
+    <h1>Digital Transformation &amp;<br><em>Customer Experience Management</em></h1>
+    <p class="hero-sub">A comprehensive course covering digital strategy, industry-specific transformation, and the full spectrum of customer experience management frameworks.</p>
+    <div class="hero-meta">
+      <div class="hero-meta-item">
+        <div class="hero-meta-dot"></div>
+        <strong>30</strong>&nbsp;Topics
+      </div>
+      <div class="hero-meta-item">
+        <div class="hero-meta-dot"></div>
+        <strong>2</strong>&nbsp;Modules
+      </div>
+      <div class="hero-meta-item">
+        <div class="hero-meta-dot"></div>
+        <strong>Intermediate</strong>&nbsp;Level
+      </div>
+      <div class="hero-meta-item">
+        <div class="hero-meta-dot"></div>
+        Available on&nbsp;<strong>Udemy</strong>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="progress-bar"><div class="progress-bar-fill" id="progressFill"></div></div>
+
+<!-- MOBILE TOGGLE -->
+<div style="padding: 16px 24px 0; max-width: 960px; margin: 0 auto;">
+  <button class="mobile-toc-toggle" onclick="document.querySelector('.sidebar').classList.toggle('mobile-open')">
+    <span>📋 Course Contents</span>
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+  </button>
+</div>
+
+<!-- LAYOUT -->
+<div class="layout">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="sidebar-card">
+      <div class="sidebar-head">
+        <h2>Course Contents</h2>
+        <span class="sidebar-count">30</span>
+      </div>
+      <div class="search-wrap">
+        <svg class="search-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <input type="text" id="tocSearch" placeholder="Search topics…" oninput="filterToc(this.value)">
+      </div>
+      <div class="sidebar-body" id="tocBody">
+
+        <div class="module-group">
+          <div class="module-label">Module 1 — Digital Transformation</div>
+          <button class="toc-item" onclick="openTopic(0)" id="toc-0">
+            <span class="toc-num">01</span>
+            <span class="toc-text">Industry-Specific Digital Transformation</span>
+            <svg class="toc-arrow" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+          </button>
+          <button class="toc-item" onclick="openTopic(1)" id="toc-1">
+            <span class="toc-num">02</span>
+            <span class="toc-text">Global Uberization and its Impact to Business</span>
+            <svg class="toc-arrow" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+          </button>
+          <button class="toc-item" onclick="openTopic(2)" id="toc-2">
+            <span class="toc-num">03</span>
+            <span class="toc-text">Open Digital Transformation</span>
+            <svg class="toc-arrow" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+          </button>
+          <button class="toc-item" onclick="openTopic(3)" id="toc-3">
+            <span class="toc-num">04</span>
+            <span class="toc-text">Two-Speed Digital Transformation</span>
+            <svg class="toc-arrow" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+          </button>
+          <button class="toc-item" onclick="openTopic(4)" id="toc-4">
+            <span class="toc-num">05</span>
+            <span class="toc-text">Best Practices &amp; Examples of Digital Transformation</span>
+            <svg class="toc-arrow" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+          </button>
+          <button class="toc-item" onclick="openTopic(5)" id="toc-5">
+            <span class="toc-num">06</span>
+            <span class="toc-text">Management of IT Resources (Outsource vs Outstaff vs In-house)</span>
+            <svg class="toc-arrow" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+          </button>
+          <button class="toc-item" onclick="openTopic(6)" id="toc-6">
+            <span class="toc-num">07</span>
+            <span class="toc-text">Utilizing Flexible Methodologies for Effective Digital Transformation</span>
+            <svg class="toc-arrow" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+          </button>
+        </div>
+
+        <div class="module-group">
+          <div class="module-label">Module 2 — Customer Experience Management</div>
+          <button class="toc-item" onclick="openTopic(7)" id="toc-7">
+            <span class="toc-num">08</span>
+            <span class="toc-text">Introduction to Customer Experience Management</span>
+            <svg class="toc-arrow" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+          </button>
+          <button class="toc-item" onclick="openTopic(8)" id="toc-8">
+            <span class="toc-num">09</span>
+            <span class="toc-text">Course Presentation</span>
+            <svg class="toc-arrow" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+          </button>
+          <button class="toc-item" onclick="openTopic(9)" id="toc-9">
+            <span class="toc-num">10</span>
+            <span class="toc-text">Theory Overview</span>
+            <svg class="toc-arrow" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+          </button>
+          <button class="toc-item" onclick="openTopic(10)" id="toc-10">
+            <span class="toc-num">11</span>
+            <span class="toc-text">High-Level Frameworks</span>
+            <svg class="toc-arrow" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+          </button>
+          <button class="toc-item" onclick="openTopic(11)" id="toc-11">
+            <span class="toc-num">12</span>
+            <span class="toc-text">CX Principles</span>
+            <svg class="toc-arrow" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+          </button>
+          <button class="toc-item" onclick="openTopic(12)" id="toc-12">
+            <span class="toc-num">13</span>
+            <span class="toc-text">Customer Segmentation and Persona Development</span>
+            <svg class="toc-arrow" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+          </button>
+          <button class="toc-item" onclick="openTopic(13)" id="toc-13">
+            <span class="toc-num">14</span>
+            <span class="toc-text">Service Recovery and Complaint Handling</span>
+            <svg class="toc-arrow" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+          </button>
+          <button class="toc-item" onclick="openTopic(14)" id="toc-14">
+            <span class="toc-num">15</span>
+            <span class="toc-text">Customer Journey Optimisation</span>
+            <svg class="toc-arrow" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+          </button>
+          <button class="toc-item" onclick="openTopic(15)" id="toc-15">
+            <span class="toc-num">16</span>
+            <span class="toc-text">Service Blueprinting and Process Design</span>
+            <svg class="toc-arrow" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+          </button>
+          <button class="toc-item" onclick="openTopic(16)" id="toc-16">
+            <span class="toc-num">17</span>
+            <span class="toc-text">Voice of the Customer (VoC) Analysis</span>
+            <svg class="toc-arrow" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+          </button>
+          <button class="toc-item" onclick="openTopic(17)" id="toc-17">
+            <span class="toc-num">18</span>
+            <span class="toc-text">Emotional Experience Design (EED)</span>
+            <svg class="toc-arrow" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+          </button>
+          <button class="toc-item" onclick="openTopic(18)" id="toc-18">
+            <span class="toc-num">19</span>
+            <span class="toc-text">Lifetime Value (LTV) and Customer Lifetime Value (CLV)</span>
+            <svg class="toc-arrow" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+          </button>
+          <button class="toc-item" onclick="openTopic(19)" id="toc-19">
+            <span class="toc-num">20</span>
+            <span class="toc-text">Employee Experience (EX)</span>
+            <svg class="toc-arrow" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+          </button>
+          <button class="toc-item" onclick="openTopic(20)" id="toc-20">
+            <span class="toc-num">21</span>
+            <span class="toc-text">Understanding the Power of Customer Experience Management</span>
+            <svg class="toc-arrow" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+          </button>
+          <button class="toc-item" onclick="openTopic(21)" id="toc-21">
+            <span class="toc-num">22</span>
+            <span class="toc-text">Assessing the Current State of UX</span>
+            <svg class="toc-arrow" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+          </button>
+          <button class="toc-item" onclick="openTopic(22)" id="toc-22">
+            <span class="toc-num">23</span>
+            <span class="toc-text">Identifying Key Stakeholders and Building a CEM Team</span>
+            <svg class="toc-arrow" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+          </button>
+          <button class="toc-item" onclick="openTopic(23)" id="toc-23">
+            <span class="toc-num">24</span>
+            <span class="toc-text">Developing a Customer-Centric Vision and Strategy</span>
+            <svg class="toc-arrow" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+          </button>
+          <button class="toc-item" onclick="openTopic(24)" id="toc-24">
+            <span class="toc-num">25</span>
+            <span class="toc-text">Prioritizing UX Improvements Based on Impact and Feasibility</span>
+            <svg class="toc-arrow" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+          </button>
+          <button class="toc-item" onclick="openTopic(25)" id="toc-25">
+            <span class="toc-num">26</span>
+            <span class="toc-text">Designing and Implementing UX Improvements</span>
+            <svg class="toc-arrow" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+          </button>
+          <button class="toc-item" onclick="openTopic(26)" id="toc-26">
+            <span class="toc-num">27</span>
+            <span class="toc-text">Establishing Metrics and KPIs for UX Success</span>
+            <svg class="toc-arrow" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+          </button>
+          <button class="toc-item" onclick="openTopic(27)" id="toc-27">
+            <span class="toc-num">28</span>
+            <span class="toc-text">Communicating the Value of UX to the Organisation</span>
+            <svg class="toc-arrow" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+          </button>
+          <button class="toc-item" onclick="openTopic(28)" id="toc-28">
+            <span class="toc-num">29</span>
+            <span class="toc-text">Building a Feedback Loop for Continuous Improvement</span>
+            <svg class="toc-arrow" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+          </button>
+          <button class="toc-item" onclick="openTopic(29)" id="toc-29">
+            <span class="toc-num">30</span>
+            <span class="toc-text">The Future of UX: Staying Ahead of the Curve</span>
+            <svg class="toc-arrow" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+          </button>
+        </div>
+
+      </div>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="main" id="mainArea">
+
+    <!-- Welcome state -->
+    <div id="welcomeState" class="welcome-card">
+      <div class="welcome-icon">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#1a6b72" stroke-width="1.8"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+      </div>
+      <h2>Select a topic to begin</h2>
+      <p>Choose any lesson from the course contents on the left to open its lecture notes right here.</p>
+      <div class="welcome-hint">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        Each topic links to its own lecture notes page
+      </div>
+    </div>
+
+    <!-- Content panel (shown when topic selected) -->
+    <div id="contentPanel" class="content-panel">
+      <div class="panel-header">
+        <div class="panel-eyebrow">
+          <span class="panel-num" id="panelNum">01</span>
+          <span class="panel-module-tag" id="panelModule">Module 1 — Digital Transformation</span>
+        </div>
+        <h2 id="panelTitle">Topic Title</h2>
+        <p class="panel-desc" id="panelDesc">Lecture notes for this topic.</p>
+        <div class="panel-actions">
+          <a href="#" id="panelOpenLink" class="btn-primary" target="_blank">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+            Open Full Page
+          </a>
+          <button class="btn-secondary" onclick="copyLink()">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+            Copy Link
+          </button>
+        </div>
+      </div>
+      <div class="panel-body">
+        <div class="panel-iframe-wrap" id="iframeWrap">
+          <div class="iframe-loader" id="iframeLoader">
+            <div class="loader-ring"></div>
+            <span class="loader-text">Loading lecture notes…</span>
+          </div>
+          <iframe id="contentFrame" src="" title="Lecture Notes" onload="onFrameLoad()"></iframe>
+        </div>
+        <!-- Fallback placeholder shown when file not yet uploaded -->
+        <div class="placeholder-wrap" id="placeholderWrap" style="display:none">
+          <h3>Lecture notes coming soon</h3>
+          <p>The HTML file for this topic has not been uploaded to GitHub yet. Once uploaded, it will appear here automatically.</p>
+          <div class="code-tag" id="placeholderFile">filename.html</div>
+        </div>
+      </div>
+      <div class="nav-arrows">
+        <button class="nav-btn" id="prevBtn" onclick="navigateTopic(-1)">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
+          Previous
+        </button>
+        <button class="nav-btn" id="nextBtn" onclick="navigateTopic(1)">
+          Next
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+        </button>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<!-- FOOTER -->
+<footer class="site-footer">
+  <p>Digital Transformation &amp; CXM — Course Portal</p>
+  <a href="https://www.udemy.com/course/digital-transformation-customer-experience-management-cxm/" target="_blank">View on Udemy ↗</a>
+</footer>
+
+<script>
+// ── DATA ─────────────────────────────────────────────────────────
+const GITHUB_BASE = 'https://github.com/nkhooah-bot/digital-transformation-cxm/main/'; 
+// Update GITHUB_BASE to your actual GitHub Pages / raw URL once uploaded.
+// Example: 'https://username.github.io/cxm-course/'
+
+const topics = [
+  // Module 1
+  { num:'01', module:'Module 1 — Digital Transformation', title:'Industry-Specific Digital Transformation', file:'lecture_digital_transformation.html', desc:'How digital transformation strategies differ across industries and sectors, with context-specific examples.' },
+  { num:'02', module:'Module 1 — Digital Transformation', title:'Global Uberization and its Impact to Business', file:'lecture_uberization.html', desc:'Exploring the Uberization phenomenon — platform-based disruption and its implications for traditional business models worldwide.' },
+  { num:'03', module:'Module 1 — Digital Transformation', title:'Open Digital Transformation', file:'lecture_open_dt.html', desc:'Understanding open models of digital transformation, collaborative ecosystems, and open innovation platforms.' },
+  { num:'04', module:'Module 1 — Digital Transformation', title:'Two-Speed Digital Transformation', file:'lecture_two_speed_dt.html', desc:'Managing two parallel transformation tracks — legacy system stability alongside agile digital innovation.' },
+  { num:'05', module:'Module 1 — Digital Transformation', title:'Best Practices & Examples of Digital Transformation', file:'lecture_dt_best_practices.html', desc:'Real-world case studies and proven best practices drawn from leading organisations across industries.' },
+  { num:'06', module:'Module 1 — Digital Transformation', title:'Management of IT Resources (Outsource vs Outstaff vs In-house)', file:'lecture_it_resources.html', desc:'Comparing IT resourcing models — their trade-offs, use cases, and strategic implications for digital initiatives.' },
+  { num:'07', module:'Module 1 — Digital Transformation', title:'Utilizing Flexible Methodologies for Effective Digital Transformation', file:'lecture_flexible_methodologies.html', desc:'Applying agile, lean, and hybrid methodologies to drive effective and sustainable digital transformation.' },
+  // Module 2
+  { num:'08', module:'Module 2 — Customer Experience Management', title:'Introduction to Customer Experience Management', file:'lecture_intro_cxm.html', desc:'Foundational concepts of CXM — what it is, why it matters, and how it differs from traditional customer service.' },
+  { num:'09', module:'Module 2 — Customer Experience Management', title:'Course Presentation', file:'lecture_course_presentation.html', desc:'An overview of the CXM module structure, learning objectives, and how the topics interconnect.' },
+  { num:'10', module:'Module 2 — Customer Experience Management', title:'Theory Overview', file:'lecture_theory_overview.html', desc:'Key theoretical underpinnings of customer experience — from service-dominant logic to experience economy theory.' },
+  { num:'11', module:'Module 2 — Customer Experience Management', title:'High-Level Frameworks', file:'lecture_cx_frameworks.html', desc:'Strategic CX frameworks used by leading organisations to design, measure, and manage customer experience at scale.' },
+  { num:'12', module:'Module 2 — Customer Experience Management', title:'CX Principles', file:'lecture_cx_principles.html', desc:'The core principles that guide effective customer experience design and management across all touchpoints.' },
+  { num:'13', module:'Module 2 — Customer Experience Management', title:'Customer Segmentation and Persona Development', file:'lecture_segmentation_personas.html', desc:'Techniques for segmenting customers and building rich personas that inform experience design decisions.' },
+  { num:'14', module:'Module 2 — Customer Experience Management', title:'Service Recovery and Complaint Handling', file:'lecture_service_recovery.html', desc:'Strategies for recovering from service failures, handling complaints effectively, and turning detractors into advocates.' },
+  { num:'15', module:'Module 2 — Customer Experience Management', title:'Customer Journey Optimisation', file:'lecture_journey_optimisation.html', desc:'Mapping and optimising end-to-end customer journeys to eliminate friction and maximise satisfaction at every stage.' },
+  { num:'16', module:'Module 2 — Customer Experience Management', title:'Service Blueprinting and Process Design', file:'lecture_service_blueprinting.html', desc:'Using service blueprints to align front-stage customer interactions with back-stage processes and support systems.' },
+  { num:'17', module:'Module 2 — Customer Experience Management', title:'Voice of the Customer (VoC) Analysis', file:'lecture_voc_analysis.html', desc:'Methodologies for capturing, analysing, and acting on the authentic voice of the customer across all channels.' },
+  { num:'18', module:'Module 2 — Customer Experience Management', title:'Emotional Experience Design (EED)', file:'lecture_eed.html', desc:'Designing experiences that resonate emotionally — leveraging psychology and empathy to create lasting impressions.' },
+  { num:'19', module:'Module 2 — Customer Experience Management', title:'Lifetime Value (LTV) and Customer Lifetime Value (CLV)', file:'lecture_ltv_clv.html', desc:'Understanding and calculating LTV/CLV to prioritise investments and build strategies around long-term customer value.' },
+  { num:'20', module:'Module 2 — Customer Experience Management', title:'Employee Experience (EX)', file:'lecture_employee_experience.html', desc:'The critical link between employee experience and customer experience — why happy employees create happy customers.' },
+  { num:'21', module:'Module 2 — Customer Experience Management', title:'Understanding the Power of Customer Experience Management', file:'lecture_power_of_cxm.html', desc:'The business case for CXM — ROI, competitive advantage, and the strategic value of experience-led organisations.' },
+  { num:'22', module:'Module 2 — Customer Experience Management', title:'Assessing the Current State of UX', file:'lecture_assessing_ux.html', desc:'Frameworks and tools for conducting a rigorous audit of your organisation\'s current user experience maturity.' },
+  { num:'23', module:'Module 2 — Customer Experience Management', title:'Identifying Key Stakeholders and Building a CEM Team', file:'lecture_cem_team.html', desc:'Mapping stakeholder landscapes and assembling the cross-functional team needed to drive CEM initiatives.' },
+  { num:'24', module:'Module 2 — Customer Experience Management', title:'Developing a Customer-Centric Vision and Strategy', file:'lecture_cx_vision_strategy.html', desc:'Crafting a compelling customer-centric vision and translating it into a coherent, actionable CX strategy.' },
+  { num:'25', module:'Module 2 — Customer Experience Management', title:'Prioritizing UX Improvements Based on Impact and Feasibility', file:'lecture_ux_prioritisation.html', desc:'Using impact-feasibility matrices and scoring models to prioritise the UX improvements that deliver most value.' },
+  { num:'26', module:'Module 2 — Customer Experience Management', title:'Designing and Implementing UX Improvements', file:'lecture_ux_implementation.html', desc:'End-to-end process for designing, prototyping, testing, and rolling out UX improvements systematically.' },
+  { num:'27', module:'Module 2 — Customer Experience Management', title:'Establishing Metrics and KPIs for UX Success', file:'lecture_ux_metrics.html', desc:'Defining the right metrics — NPS, CSAT, CES, and beyond — to measure and communicate UX performance.' },
+  { num:'28', module:'Module 2 — Customer Experience Management', title:'Communicating the Value of UX to the Organisation', file:'lecture_communicating_ux.html', desc:'Storytelling, dashboards, and reporting frameworks for building internal buy-in around UX investment.' },
+  { num:'29', module:'Module 2 — Customer Experience Management', title:'Building a Feedback Loop for Continuous Improvement', file:'lecture_feedback_loop.html', desc:'Designing closed-loop feedback systems that keep the organisation learning and improving continuously.' },
+  { num:'30', module:'Module 2 — Customer Experience Management', title:'The Future of UX: Staying Ahead of the Curve', file:'lecture_future_ux.html', desc:'Emerging trends, technologies, and approaches shaping the next frontier of customer and user experience.' },
+];
+
+let currentIndex = -1;
+
+function openTopic(index) {
+  currentIndex = index;
+  const t = topics[index];
+
+  // Update sidebar active state
+  document.querySelectorAll('.toc-item').forEach((el, i) => {
+    el.classList.toggle('active', i === index);
+  });
+
+  // Scroll sidebar item into view
+  const activeBtn = document.getElementById('toc-' + index);
+  if (activeBtn) activeBtn.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+
+  // Hide welcome, show panel
+  document.getElementById('welcomeState').style.display = 'none';
+  const panel = document.getElementById('contentPanel');
+  panel.classList.remove('visible');
+  void panel.offsetWidth; // reflow for animation
+  panel.classList.add('visible');
+
+  // Populate header
+  document.getElementById('panelNum').textContent = t.num;
+  document.getElementById('panelModule').textContent = t.module;
+  document.getElementById('panelTitle').textContent = t.title;
+  document.getElementById('panelDesc').textContent = t.desc;
+
+  // File URL
+  const fileUrl = GITHUB_BASE + t.file;
+  document.getElementById('panelOpenLink').href = fileUrl;
+  document.getElementById('placeholderFile').textContent = t.file;
+
+  // Show iframe loader
+  const loader = document.getElementById('iframeLoader');
+  const iframe = document.getElementById('contentFrame');
+  const iframeWrap = document.getElementById('iframeWrap');
+  const placeholder = document.getElementById('placeholderWrap');
+
+  loader.classList.remove('hidden');
+  iframeWrap.style.display = 'block';
+  placeholder.style.display = 'none';
+  iframe.src = fileUrl;
+
+  // Nav buttons
+  document.getElementById('prevBtn').disabled = index === 0;
+  document.getElementById('nextBtn').disabled = index === topics.length - 1;
+
+  // Progress
+  const pct = Math.round(((index + 1) / topics.length) * 100);
+  document.getElementById('progressFill').style.width = pct + '%';
+
+  // Scroll main into view on mobile
+  if (window.innerWidth < 720) {
+    document.getElementById('mainArea').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+}
+
+function onFrameLoad() {
+  // Hide loader after a short delay for smoothness
+  setTimeout(() => {
+    const loader = document.getElementById('iframeLoader');
+    loader.classList.add('hidden');
+  }, 200);
+}
+
+function navigateTopic(dir) {
+  const next = currentIndex + dir;
+  if (next >= 0 && next < topics.length) openTopic(next);
+}
+
+function copyLink() {
+  if (currentIndex < 0) return;
+  const url = GITHUB_BASE + topics[currentIndex].file;
+  navigator.clipboard.writeText(url).then(() => {
+    const btn = event.currentTarget;
+    const orig = btn.innerHTML;
+    btn.innerHTML = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> Copied!';
+    setTimeout(() => { btn.innerHTML = orig; }, 1800);
+  });
+}
+
+function filterToc(query) {
+  const q = query.toLowerCase().trim();
+  document.querySelectorAll('.toc-item').forEach((btn, i) => {
+    const text = topics[i].title.toLowerCase();
+    btn.style.display = (!q || text.includes(q)) ? 'flex' : 'none';
+  });
+  // Show/hide module labels
+  document.querySelectorAll('.module-group').forEach(group => {
+    const anyVisible = [...group.querySelectorAll('.toc-item')].some(b => b.style.display !== 'none');
+    group.querySelector('.module-label').style.display = anyVisible ? 'block' : 'none';
+  });
+}
+
+// Keyboard navigation
+document.addEventListener('keydown', e => {
+  if (e.key === 'ArrowDown' && e.altKey) navigateTopic(1);
+  if (e.key === 'ArrowUp' && e.altKey) navigateTopic(-1);
+});
+</script>
+</body>
+</html>
