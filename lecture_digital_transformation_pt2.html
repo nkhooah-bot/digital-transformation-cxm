@@ -1,0 +1,751 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lecture – Digital Transformation: Strategy &amp; Implementation</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Source+Code+Pro:wght@400;600&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --teal: #1a6b72;
+    --teal-dark: #124f54;
+    --teal-light: #e8f4f5;
+    --gold: #c8a84b;
+    --cream: #fdf6ec;
+    --paper: #fffdf9;
+    --ink: #1e1e1e;
+    --muted: #6b6b6b;
+    --border: #d4c9b0;
+    --code-bg: #f5f2ec;
+    --accent: #e85d2a;
+    --page-width: 820px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: #c8bfaf;
+    background-image: repeating-linear-gradient(
+      45deg,
+      transparent,
+      transparent 10px,
+      rgba(0,0,0,0.015) 10px,
+      rgba(0,0,0,0.015) 20px
+    );
+    font-family: 'Lato', sans-serif;
+    color: var(--ink);
+    min-height: 100vh;
+    padding: 30px 20px 60px;
+  }
+
+  /* ── Toolbar ───────────────────────────────────── */
+  #toolbar {
+    max-width: var(--page-width);
+    margin: 0 auto 18px;
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+  }
+  #toolbar button {
+    background: var(--teal);
+    color: #fff;
+    border: none;
+    padding: 9px 20px;
+    border-radius: 4px;
+    font-family: 'Lato', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: .05em;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    transition: background .2s;
+  }
+  #toolbar button:hover { background: var(--teal-dark); }
+
+  /* ── Document shell ───────────────────────────── */
+  #document {
+    max-width: var(--page-width);
+    margin: 0 auto;
+    background: var(--paper);
+    box-shadow: 0 4px 40px rgba(0,0,0,.25), 0 1px 4px rgba(0,0,0,.15);
+    border-radius: 2px;
+  }
+
+  /* ── Cover ────────────────────────────────────── */
+  #cover {
+    background: var(--teal);
+    padding: 64px 64px 56px;
+    position: relative;
+    overflow: hidden;
+  }
+  #cover::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(
+      -45deg,
+      transparent,
+      transparent 18px,
+      rgba(255,255,255,.03) 18px,
+      rgba(255,255,255,.03) 36px
+    );
+  }
+  #cover .badge {
+    display: inline-block;
+    background: var(--gold);
+    color: var(--teal-dark);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    padding: 4px 12px;
+    border-radius: 2px;
+    margin-bottom: 24px;
+    position: relative;
+  }
+  #cover h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 42px;
+    font-weight: 700;
+    color: #fff;
+    line-height: 1.2;
+    position: relative;
+    margin-bottom: 12px;
+  }
+  #cover .subtitle {
+    color: rgba(255,255,255,.65);
+    font-size: 15px;
+    letter-spacing: .04em;
+    position: relative;
+    margin-bottom: 40px;
+  }
+  #cover .meta {
+    display: flex;
+    gap: 32px;
+    position: relative;
+  }
+  #cover .meta-item { color: rgba(255,255,255,.7); font-size: 13px; }
+  #cover .meta-item strong { display: block; color: var(--gold); font-size: 11px; letter-spacing: .1em; text-transform: uppercase; margin-bottom: 3px; }
+
+  /* ── Body ─────────────────────────────────────── */
+  #body { padding: 48px 64px 64px; }
+
+  /* ── TOC ──────────────────────────────────────── */
+  #toc {
+    background: var(--cream);
+    border: 1px solid var(--border);
+    border-left: 4px solid var(--teal);
+    padding: 28px 32px;
+    margin-bottom: 48px;
+    border-radius: 2px;
+  }
+  #toc h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 18px;
+    color: var(--teal-dark);
+    margin-bottom: 18px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--border);
+  }
+  #toc ol { list-style: none; counter-reset: toc-counter; }
+  #toc > ol > li { counter-increment: toc-counter; margin-bottom: 6px; }
+  #toc a {
+    color: var(--teal);
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 700;
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    padding: 4px 6px;
+    border-radius: 3px;
+    transition: background .15s;
+  }
+  #toc a::before {
+    content: counter(toc-counter) ".";
+    color: var(--gold);
+    font-family: 'Playfair Display', serif;
+    font-size: 13px;
+    min-width: 18px;
+  }
+  #toc a:hover { background: rgba(26,107,114,.08); }
+  #toc .toc-sub { list-style: none; padding-left: 26px; margin-top: 4px; }
+  #toc .toc-sub li { margin-bottom: 3px; }
+  #toc .toc-sub a { font-weight: 400; font-size: 13px; color: var(--muted); }
+  #toc .toc-sub a::before { display: none; }
+
+  /* ── Section ──────────────────────────────────── */
+  .section { margin-bottom: 52px; scroll-margin-top: 20px; }
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 20px;
+    padding-bottom: 12px;
+    border-bottom: 2px solid var(--teal-light);
+  }
+  .section-num {
+    background: var(--teal);
+    color: #fff;
+    font-family: 'Playfair Display', serif;
+    font-size: 13px;
+    width: 32px; height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 22px;
+    color: var(--teal-dark);
+    font-weight: 600;
+  }
+
+  p { font-size: 14.5px; line-height: 1.75; color: #2c2c2c; margin-bottom: 14px; }
+
+  /* ── Concept card ─────────────────────────────── */
+  .concept-card {
+    background: var(--cream);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 16px 20px;
+    margin-bottom: 12px;
+  }
+  .concept-card h4 {
+    font-family: 'Playfair Display', serif;
+    font-size: 14px;
+    color: var(--teal-dark);
+    margin-bottom: 6px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .concept-card h4::before { content: '◆'; color: var(--gold); font-size: 10px; }
+  .concept-card ul { padding-left: 18px; margin: 0; }
+  .concept-card li { font-size: 13.5px; line-height: 1.65; color: #333; margin-bottom: 4px; }
+
+  /* ── Callout ──────────────────────────────────── */
+  .callout {
+    background: var(--teal-light);
+    border-left: 3px solid var(--teal);
+    padding: 14px 18px;
+    margin: 16px 0;
+    border-radius: 0 4px 4px 0;
+    font-size: 13.5px;
+    line-height: 1.65;
+    color: var(--teal-dark);
+  }
+  .callout strong { color: var(--teal-dark); }
+
+  /* ── Grids ────────────────────────────────────── */
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin: 20px 0; }
+  .three-col { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; margin: 20px 0; }
+  @media (max-width: 680px) { .two-col, .three-col { grid-template-columns: 1fr; } }
+
+  /* ── Data card ────────────────────────────────── */
+  .data-card { border: 1px solid var(--border); border-radius: 4px; overflow: hidden; }
+  .data-card-head {
+    background: var(--teal);
+    color: #fff;
+    padding: 8px 14px;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: .07em;
+    text-transform: uppercase;
+  }
+  .data-card-body { padding: 12px 14px; font-size: 13px; background: var(--cream); }
+  .data-card-body li { margin-bottom: 4px; list-style-position: inside; color: #333; }
+  .data-card-body p { font-size: 13px; margin-bottom: 0; color: #333; line-height: 1.6; }
+
+  /* ── Gold driver card ─────────────────────────── */
+  .driver-card { border: 1px solid var(--border); border-radius: 4px; overflow: hidden; margin-bottom: 14px; }
+  .driver-card-head {
+    background: var(--gold);
+    color: var(--teal-dark);
+    padding: 8px 14px;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: .07em;
+    text-transform: uppercase;
+  }
+  .driver-card-body { padding: 13px 16px; font-size: 13.5px; background: var(--cream); line-height: 1.65; color: #333; }
+
+  /* ── Milestone steps ──────────────────────────── */
+  .milestone-list { list-style: none; padding: 0; margin: 16px 0; }
+  .milestone-list li {
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--border);
+    font-size: 13.5px;
+    line-height: 1.6;
+    color: #2c2c2c;
+  }
+  .milestone-list li:last-child { border-bottom: none; }
+  .milestone-num {
+    background: var(--teal);
+    color: #fff;
+    font-family: 'Playfair Display', serif;
+    font-size: 11px;
+    font-weight: 700;
+    min-width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+
+  /* ── Takeaway grid ────────────────────────────── */
+  .takeaway-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-top: 16px;
+  }
+  @media (max-width: 680px) { .takeaway-grid { grid-template-columns: 1fr; } }
+  .takeaway-item {
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+    background: var(--cream);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 12px 14px;
+  }
+  .takeaway-icon {
+    background: var(--gold);
+    color: var(--teal-dark);
+    font-size: 12px;
+    font-weight: 700;
+    width: 22px; height: 22px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+  .takeaway-item p { font-size: 13px; line-height: 1.55; margin-bottom: 0; }
+
+  /* ── Misc ─────────────────────────────────────── */
+  .divider { border: none; border-top: 1px solid var(--border); margin: 40px 0; }
+
+  h3.sub {
+    font-family: 'Playfair Display', serif;
+    font-size: 16px;
+    color: var(--teal-dark);
+    margin: 24px 0 10px;
+    padding-left: 12px;
+    border-left: 3px solid var(--gold);
+  }
+
+  .chip {
+    display: inline-block;
+    background: var(--teal-light);
+    color: var(--teal-dark);
+    border: 1px solid rgba(26,107,114,.25);
+    border-radius: 3px;
+    font-size: 12px;
+    font-weight: 700;
+    padding: 2px 8px;
+    margin: 2px 3px 2px 0;
+    font-family: 'Source Code Pro', monospace;
+  }
+
+  /* ── Footer ───────────────────────────────────── */
+  #footer {
+    background: var(--teal-dark);
+    color: rgba(255,255,255,.5);
+    font-size: 12px;
+    padding: 18px 64px;
+    letter-spacing: .04em;
+    display: flex;
+    justify-content: space-between;
+  }
+  #footer span { color: var(--gold); }
+
+  @media print {
+    body { background: white; padding: 0; }
+    #toolbar { display: none; }
+    #document { box-shadow: none; max-width: 100%; }
+    .section { page-break-inside: avoid; }
+  }
+</style>
+</head>
+<body>
+
+<div id="toolbar">
+  <button onclick="window.print()">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+    Export / Print as PDF
+  </button>
+</div>
+
+<div id="document">
+
+  <!-- COVER -->
+  <div id="cover">
+    <div class="badge">Business &amp; Technology · Management Studies</div>
+    <h1>Digital Transformation:<br>Strategy &amp; Implementation</h1>
+    <p class="subtitle">Alignment, Roadmaps, Dimensions &amp; Industry Context</p>
+    <div class="meta">
+      <div class="meta-item"><strong>Subject</strong>Digital Business Strategy</div>
+      <div class="meta-item"><strong>Topic</strong>Implementing Digital Transformation</div>
+      <div class="meta-item"><strong>Level</strong>Intermediate</div>
+    </div>
+  </div>
+
+  <!-- BODY -->
+  <div id="body">
+
+    <!-- TOC -->
+    <nav id="toc">
+      <h2>Table of Contents</h2>
+      <ol>
+        <li><a href="#summary">Lecture Summary</a></li>
+        <li>
+          <a href="#alignment">Aligning Digital Initiatives with Business Goals</a>
+          <ul class="toc-sub">
+            <li><a href="#why-align">Why Alignment Matters</a></li>
+            <li><a href="#strategic-integration">Strategic Integration</a></li>
+          </ul>
+        </li>
+        <li>
+          <a href="#roadmap">Building a Digital Transformation Roadmap</a>
+          <ul class="toc-sub">
+            <li><a href="#milestones">Steps &amp; Milestones</a></li>
+            <li><a href="#coordination">Coordination &amp; Progress Tracking</a></li>
+            <li><a href="#adaptability">Adaptability &amp; Iteration</a></li>
+          </ul>
+        </li>
+        <li>
+          <a href="#dimensions">Key Dimensions of Digital Transformation</a>
+          <ul class="toc-sub">
+            <li><a href="#technology">Technology</a></li>
+            <li><a href="#value">Value Creation</a></li>
+            <li><a href="#structure">Structural Changes</a></li>
+            <li><a href="#financial">Financial Considerations</a></li>
+            <li><a href="#industry">Industry-Specific Strategies</a></li>
+          </ul>
+        </li>
+        <li><a href="#takeaways">Key Takeaways</a></li>
+      </ol>
+    </nav>
+
+    <!-- SECTION 1: SUMMARY -->
+    <section class="section" id="summary">
+      <div class="section-header">
+        <div class="section-num">1</div>
+        <h2 class="section-title">Lecture Summary</h2>
+      </div>
+      <p>
+        Knowing <em>what</em> digital transformation is only gets an organisation so far — the harder challenge is knowing <em>how</em> to pursue it successfully. This lecture focuses on the practical side: ensuring digital initiatives are anchored to real business objectives, building a structured yet flexible roadmap, and understanding the key dimensions that any transformation programme must address.
+      </p>
+      <p>
+        Three major themes run through this lecture. First, <strong>alignment</strong> — digital transformation must serve the company's strategic goals, not exist as a standalone IT project. Second, the <strong>roadmap</strong> — a living plan with clear milestones, coordination mechanisms, and room for iteration. Third, the <strong>five core dimensions</strong> that shape every transformation: technology use, value creation, structural change, financial planning, and industry-specific context.
+      </p>
+    </section>
+
+    <hr class="divider">
+
+    <!-- SECTION 2: ALIGNMENT -->
+    <section class="section" id="alignment">
+      <div class="section-header">
+        <div class="section-num">2</div>
+        <h2 class="section-title">Aligning Digital Initiatives with Business Goals</h2>
+      </div>
+
+      <div id="why-align">
+        <h3 class="sub">Why Alignment Matters</h3>
+        <p>
+          Digital transformation should never be pursued for its own sake. Every digital initiative must serve the company's <strong>overarching strategic objectives</strong> — only then does transformation translate into tangible business outcomes.
+        </p>
+        <div class="two-col">
+          <div class="data-card">
+            <div class="data-card-head">🎯 Business Goal</div>
+            <div class="data-card-body">
+              <p>Improve customer satisfaction</p>
+            </div>
+          </div>
+          <div class="data-card">
+            <div class="data-card-head">💡 Aligned Digital Initiative</div>
+            <div class="data-card-body">
+              <p>Personalised services, efficient online platforms, seamless omnichannel interactions</p>
+            </div>
+          </div>
+        </div>
+        <div class="callout">
+          <strong>Key principle:</strong> Alignment ensures that transformation efforts contribute to outcomes like <strong>increased revenue, improved customer loyalty, or expanded market reach</strong> — not just technological modernisation.
+        </div>
+        <div class="concept-card">
+          <h4>What Alignment Requires</h4>
+          <ul>
+            <li>A clear articulation of the business's <strong>mission, vision, and long-term goals</strong>.</li>
+            <li>Comprehensive understanding of how digital technologies can facilitate those goals.</li>
+            <li>Treating digital transformation as a <strong>strategic business initiative</strong> — not merely an IT project.</li>
+            <li><em>Example:</em> A company aiming to lead in customer service should integrate AI-powered chatbots, advanced CRM systems, and data analytics tools.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div id="strategic-integration">
+        <h3 class="sub">Strategic Integration</h3>
+        <p>
+          Strategic integration means embedding digital initiatives into the <strong>core of the business strategy</strong>, rather than treating them as separate or standalone projects.
+        </p>
+        <div class="concept-card">
+          <h4>What Strategic Integration Looks Like</h4>
+          <ul>
+            <li>Digital transformation becomes part of the <strong>business planning process</strong>, influencing decision-making, resource allocation, and performance measurement.</li>
+            <li>Involves <strong>cross-functional collaboration</strong> — different departments working together toward common digital goals.</li>
+            <li>Digital initiatives are coherent and synergistic, not siloed.</li>
+            <li><em>Example:</em> Integrating digital transformation into the supply chain strategy leads to more efficient inventory management, reduced costs, and faster delivery times.</li>
+          </ul>
+        </div>
+        <div class="callout">
+          <strong>Outcome:</strong> Strategic integration leads to <strong>sustained competitive advantage and business growth</strong> by ensuring digital and business strategies move as one.
+        </div>
+      </div>
+    </section>
+
+    <hr class="divider">
+
+    <!-- SECTION 3: ROADMAP -->
+    <section class="section" id="roadmap">
+      <div class="section-header">
+        <div class="section-num">3</div>
+        <h2 class="section-title">Building a Digital Transformation Roadmap</h2>
+      </div>
+      <p>A digital transformation roadmap is a structured, living plan that guides the organisation through its transformation journey — providing direction, coordinating effort, and adapting as circumstances evolve.</p>
+
+      <div id="milestones">
+        <h3 class="sub">Steps &amp; Milestones</h3>
+        <p>Breaking the transformation journey into <strong>manageable phases</strong> ensures clarity and direction for everyone involved.</p>
+        <ul class="milestone-list">
+          <li>
+            <div class="milestone-num">1</div>
+            <div><strong>Digital Readiness Assessment</strong> — Evaluate current capabilities and identify key areas for improvement.</div>
+          </li>
+          <li>
+            <div class="milestone-num">2</div>
+            <div><strong>Pilot Projects</strong> — Test digital initiatives at small scale before committing resources to full rollout.</div>
+          </li>
+          <li>
+            <div class="milestone-num">3</div>
+            <div><strong>Scale Successful Initiatives</strong> — Expand what works across the organisation systematically.</div>
+          </li>
+          <li>
+            <div class="milestone-num">4</div>
+            <div><strong>Milestone Reviews</strong> — Checkpoint meetings that mark significant achievements and confirm the path forward.</div>
+          </li>
+        </ul>
+      </div>
+
+      <div id="coordination">
+        <h3 class="sub">Coordination &amp; Progress Tracking</h3>
+        <div class="two-col">
+          <div class="concept-card">
+            <h4>Coordination</h4>
+            <ul>
+              <li>Roadmap delineates <strong>roles, responsibilities, and timelines</strong> for each task.</li>
+              <li>Ensures all teams are aligned and working toward common objectives.</li>
+              <li>Reduces duplication of effort and maximises resource utilisation.</li>
+            </ul>
+          </div>
+          <div class="concept-card">
+            <h4>Progress Tracking</h4>
+            <ul>
+              <li>Regular progress reviews identify deviations from the plan early.</li>
+              <li>Project management tools and <strong>performance dashboards</strong> enable real-time reporting.</li>
+              <li>Keeps every stakeholder informed and accountable.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div id="adaptability">
+        <h3 class="sub">Adaptability &amp; Iteration</h3>
+        <p>The business environment constantly changes — a good roadmap changes with it.</p>
+        <div class="driver-card">
+          <div class="driver-card-head">🔄 The Iterative Roadmap</div>
+          <div class="driver-card-body">
+            The roadmap is <strong>not set in stone</strong>. It evolves based on feedback, new insights, and changing circumstances. If a particular technology or strategy is not delivering expected results, the roadmap should allow for pivoting to alternative approaches. Pilot programmes test and refine initiatives before full-scale implementation, ensuring effectiveness and alignment with real business needs.
+          </div>
+        </div>
+        <div class="callout">
+          <strong>Result:</strong> An adaptive roadmap keeps the transformation journey <strong>dynamic and responsive</strong>, leading to more sustainable and impactful outcomes than a rigid plan ever could.
+        </div>
+      </div>
+    </section>
+
+    <hr class="divider">
+
+    <!-- SECTION 4: DIMENSIONS -->
+    <section class="section" id="dimensions">
+      <div class="section-header">
+        <div class="section-num">4</div>
+        <h2 class="section-title">Key Dimensions of Digital Transformation</h2>
+      </div>
+      <p>Digital transformation is multi-dimensional. Each of the five dimensions below plays a vital role in the overall success of any transformation programme.</p>
+
+      <!-- Technology -->
+      <div id="technology">
+        <h3 class="sub">1. Technology</h3>
+        <div class="concept-card">
+          <h4>Selecting &amp; Implementing the Right Tools</h4>
+          <ul>
+            <li>Technology is at the <strong>core</strong> of digital transformation.</li>
+            <li>Involves identifying technologies that align with strategic goals: <span class="chip">Cloud</span> <span class="chip">AI</span> <span class="chip">Big Data</span> <span class="chip">IoT</span></li>
+            <li>Objective: enhance efficiency, improve decision-making, and enable innovative business models.</li>
+            <li>Organisations must stay updated with advancements and select tools that best fit their specific needs.</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Value Creation -->
+      <div id="value">
+        <h3 class="sub">2. Value Creation</h3>
+        <div class="concept-card">
+          <h4>Creating New Value Through Digital Means</h4>
+          <ul>
+            <li>Digital transformation must fundamentally focus on <strong>creating new value</strong>.</li>
+            <li>Value can manifest as improved customer satisfaction, streamlined operations, or new revenue streams.</li>
+            <li>Requires understanding customer needs and developing digital solutions that meet or exceed expectations.</li>
+            <li><em>Example:</em> Personalised interactions and data-driven insights enhance customer loyalty and drive growth.</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Structural Changes -->
+      <div id="structure">
+        <h3 class="sub">3. Structural Changes</h3>
+        <div class="concept-card">
+          <h4>Reorganising to Support Digital Operations</h4>
+          <ul>
+            <li>Organisations may need to <strong>reorganise teams, redefine roles, and alter workflows</strong> to align with digital processes.</li>
+            <li>Structural changes ensure the organisation is agile and can adapt quickly to new digital strategies.</li>
+            <li>May involve creating new departments or roles focused on digital innovation and transformation.</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Financial -->
+      <div id="financial">
+        <h3 class="sub">4. Financial Considerations</h3>
+        <div class="concept-card">
+          <h4>Budgeting for Sustainable Transformation</h4>
+          <ul>
+            <li>Financial planning is critical to ensuring transformation initiatives are <strong>sustainable</strong> and deliver strong ROI.</li>
+            <li>Involves budgeting for new technologies, staff training, and potential restructuring.</li>
+            <li>Cost–benefit analysis helps prioritise investments with the most significant impact.</li>
+            <li>Financial planning must also cover <strong>ongoing maintenance and upgrades</strong> of digital systems.</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Industry-Specific -->
+      <div id="industry">
+        <h3 class="sub">5. Industry-Specific Strategies</h3>
+        <p>Digital transformation is <strong>not a one-size-fits-all</strong> approach. Different industries face distinct challenges and opportunities — strategies must reflect these nuances.</p>
+        <div class="two-col">
+          <div class="data-card">
+            <div class="data-card-head">🏥 Healthcare</div>
+            <div class="data-card-body">
+              <ul>
+                <li>Telemedicine platforms</li>
+                <li>Electronic health records (EHR)</li>
+                <li>Remote patient monitoring</li>
+              </ul>
+            </div>
+          </div>
+          <div class="data-card">
+            <div class="data-card-head">🛍️ Retail</div>
+            <div class="data-card-body">
+              <ul>
+                <li>E-commerce platforms</li>
+                <li>Personalised marketing</li>
+                <li>AI-driven inventory management</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div class="callout">
+          <strong>Principle:</strong> Understanding industry-specific dynamics ensures that transformation efforts are <strong>relevant and effective</strong> — not just technically sound but contextually appropriate.
+        </div>
+      </div>
+
+    </section>
+
+    <hr class="divider">
+
+    <!-- SECTION 5: TAKEAWAYS -->
+    <section class="section" id="takeaways">
+      <div class="section-header">
+        <div class="section-num">5</div>
+        <h2 class="section-title">Key Takeaways</h2>
+      </div>
+      <div class="takeaway-grid">
+        <div class="takeaway-item">
+          <div class="takeaway-icon">1</div>
+          <p>Digital initiatives must be <strong>aligned with business goals</strong> — transformation exists to advance strategy, not for its own sake.</p>
+        </div>
+        <div class="takeaway-item">
+          <div class="takeaway-icon">2</div>
+          <p><strong>Strategic integration</strong> embeds digital transformation into the core business planning process through cross-functional collaboration.</p>
+        </div>
+        <div class="takeaway-item">
+          <div class="takeaway-icon">3</div>
+          <p>A <strong>roadmap with clear milestones</strong> breaks the transformation into manageable phases and keeps everyone aligned.</p>
+        </div>
+        <div class="takeaway-item">
+          <div class="takeaway-icon">4</div>
+          <p>Roadmaps must be <strong>adaptive and iterative</strong> — tested through pilots and revised in response to feedback and change.</p>
+        </div>
+        <div class="takeaway-item">
+          <div class="takeaway-icon">5</div>
+          <p><strong>Technology selection</strong> should always align with strategic goals — cloud, AI, big data, and IoT are key enabling tools.</p>
+        </div>
+        <div class="takeaway-item">
+          <div class="takeaway-icon">6</div>
+          <p>The ultimate purpose is <strong>value creation</strong> — for customers through better experience, and for the business through new revenue streams.</p>
+        </div>
+        <div class="takeaway-item">
+          <div class="takeaway-icon">7</div>
+          <p><strong>Structural and financial planning</strong> are essential — organisations must reorganise and budget sustainably to support transformation.</p>
+        </div>
+        <div class="takeaway-item">
+          <div class="takeaway-icon">8</div>
+          <p>Transformation strategies must be <strong>tailored to the industry</strong> — what works in retail may be very different from what works in healthcare.</p>
+        </div>
+      </div>
+    </section>
+
+  </div><!-- /body -->
+
+  <!-- FOOTER -->
+  <div id="footer">
+    <span>Digital Business Strategy – Lecture Notes</span>
+    <span>Topic: <span>Digital Transformation: Strategy &amp; Implementation</span></span>
+  </div>
+
+</div><!-- /document -->
+
+<script>
+  document.querySelectorAll('#toc a').forEach(link => {
+    link.addEventListener('click', e => {
+      e.preventDefault();
+      const target = document.querySelector(link.getAttribute('href'));
+      if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+  });
+</script>
+</body>
+</html>

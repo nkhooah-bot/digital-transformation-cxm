@@ -1,0 +1,788 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lecture – Digital Transformation: Culture, People &amp; Change</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Source+Code+Pro:wght@400;600&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --teal: #1a6b72;
+    --teal-dark: #124f54;
+    --teal-light: #e8f4f5;
+    --gold: #c8a84b;
+    --cream: #fdf6ec;
+    --paper: #fffdf9;
+    --ink: #1e1e1e;
+    --muted: #6b6b6b;
+    --border: #d4c9b0;
+    --accent: #e85d2a;
+    --page-width: 820px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: #c8bfaf;
+    background-image: repeating-linear-gradient(
+      45deg, transparent, transparent 10px,
+      rgba(0,0,0,0.015) 10px, rgba(0,0,0,0.015) 20px
+    );
+    font-family: 'Lato', sans-serif;
+    color: var(--ink);
+    min-height: 100vh;
+    padding: 30px 20px 60px;
+  }
+
+  #toolbar {
+    max-width: var(--page-width);
+    margin: 0 auto 18px;
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+  }
+  #toolbar button {
+    background: var(--teal);
+    color: #fff;
+    border: none;
+    padding: 9px 20px;
+    border-radius: 4px;
+    font-family: 'Lato', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: .05em;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    transition: background .2s;
+  }
+  #toolbar button:hover { background: var(--teal-dark); }
+
+  #document {
+    max-width: var(--page-width);
+    margin: 0 auto;
+    background: var(--paper);
+    box-shadow: 0 4px 40px rgba(0,0,0,.25), 0 1px 4px rgba(0,0,0,.15);
+    border-radius: 2px;
+  }
+
+  /* Cover */
+  #cover {
+    background: var(--teal);
+    padding: 64px 64px 56px;
+    position: relative;
+    overflow: hidden;
+  }
+  #cover::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(
+      -45deg, transparent, transparent 18px,
+      rgba(255,255,255,.03) 18px, rgba(255,255,255,.03) 36px
+    );
+  }
+  #cover .badge {
+    display: inline-block;
+    background: var(--gold);
+    color: var(--teal-dark);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    padding: 4px 12px;
+    border-radius: 2px;
+    margin-bottom: 24px;
+    position: relative;
+  }
+  #cover h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 42px;
+    font-weight: 700;
+    color: #fff;
+    line-height: 1.2;
+    position: relative;
+    margin-bottom: 12px;
+  }
+  #cover .subtitle {
+    color: rgba(255,255,255,.65);
+    font-size: 15px;
+    letter-spacing: .04em;
+    position: relative;
+    margin-bottom: 40px;
+  }
+  #cover .meta { display: flex; gap: 32px; position: relative; }
+  #cover .meta-item { color: rgba(255,255,255,.7); font-size: 13px; }
+  #cover .meta-item strong { display: block; color: var(--gold); font-size: 11px; letter-spacing: .1em; text-transform: uppercase; margin-bottom: 3px; }
+
+  /* Body */
+  #body { padding: 48px 64px 64px; }
+
+  /* TOC */
+  #toc {
+    background: var(--cream);
+    border: 1px solid var(--border);
+    border-left: 4px solid var(--teal);
+    padding: 28px 32px;
+    margin-bottom: 48px;
+    border-radius: 2px;
+  }
+  #toc h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 18px;
+    color: var(--teal-dark);
+    margin-bottom: 18px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--border);
+  }
+  #toc ol { list-style: none; counter-reset: toc-counter; }
+  #toc > ol > li { counter-increment: toc-counter; margin-bottom: 6px; }
+  #toc a {
+    color: var(--teal);
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 700;
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    padding: 4px 6px;
+    border-radius: 3px;
+    transition: background .15s;
+  }
+  #toc a::before {
+    content: counter(toc-counter) ".";
+    color: var(--gold);
+    font-family: 'Playfair Display', serif;
+    font-size: 13px;
+    min-width: 18px;
+  }
+  #toc a:hover { background: rgba(26,107,114,.08); }
+  #toc .toc-sub { list-style: none; padding-left: 26px; margin-top: 4px; }
+  #toc .toc-sub li { margin-bottom: 3px; }
+  #toc .toc-sub a { font-weight: 400; font-size: 13px; color: var(--muted); }
+  #toc .toc-sub a::before { display: none; }
+
+  /* Sections */
+  .section { margin-bottom: 52px; scroll-margin-top: 20px; }
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 20px;
+    padding-bottom: 12px;
+    border-bottom: 2px solid var(--teal-light);
+  }
+  .section-num {
+    background: var(--teal);
+    color: #fff;
+    font-family: 'Playfair Display', serif;
+    font-size: 13px;
+    width: 32px; height: 32px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 22px;
+    color: var(--teal-dark);
+    font-weight: 600;
+  }
+
+  p { font-size: 14.5px; line-height: 1.75; color: #2c2c2c; margin-bottom: 14px; }
+
+  /* Concept card */
+  .concept-card {
+    background: var(--cream);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 16px 20px;
+    margin-bottom: 12px;
+  }
+  .concept-card h4 {
+    font-family: 'Playfair Display', serif;
+    font-size: 14px;
+    color: var(--teal-dark);
+    margin-bottom: 6px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .concept-card h4::before { content: '◆'; color: var(--gold); font-size: 10px; }
+  .concept-card ul { padding-left: 18px; margin: 0; }
+  .concept-card li { font-size: 13.5px; line-height: 1.65; color: #333; margin-bottom: 4px; }
+
+  /* Callout */
+  .callout {
+    background: var(--teal-light);
+    border-left: 3px solid var(--teal);
+    padding: 14px 18px;
+    margin: 16px 0;
+    border-radius: 0 4px 4px 0;
+    font-size: 13.5px;
+    line-height: 1.65;
+    color: var(--teal-dark);
+  }
+  .callout strong { color: var(--teal-dark); }
+
+  /* Grids */
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin: 20px 0; }
+  .three-col { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; margin: 20px 0; }
+  @media (max-width: 680px) { .two-col, .three-col { grid-template-columns: 1fr; } }
+
+  /* Data card */
+  .data-card { border: 1px solid var(--border); border-radius: 4px; overflow: hidden; }
+  .data-card-head {
+    background: var(--teal);
+    color: #fff;
+    padding: 8px 14px;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: .07em;
+    text-transform: uppercase;
+  }
+  .data-card-body { padding: 12px 14px; font-size: 13px; background: var(--cream); }
+  .data-card-body li { margin-bottom: 4px; list-style-position: inside; color: #333; }
+  .data-card-body p { font-size: 13px; margin-bottom: 0; color: #333; line-height: 1.6; }
+
+  /* Gold driver card */
+  .driver-card { border: 1px solid var(--border); border-radius: 4px; overflow: hidden; margin-bottom: 14px; }
+  .driver-card-head {
+    background: var(--gold);
+    color: var(--teal-dark);
+    padding: 8px 14px;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: .07em;
+    text-transform: uppercase;
+  }
+  .driver-card-body { padding: 13px 16px; font-size: 13.5px; background: var(--cream); line-height: 1.65; color: #333; }
+
+  /* Numbered process list */
+  .process-list { list-style: none; padding: 0; margin: 16px 0; }
+  .process-list li {
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--border);
+    font-size: 13.5px;
+    line-height: 1.6;
+    color: #2c2c2c;
+  }
+  .process-list li:last-child { border-bottom: none; }
+  .process-num {
+    background: var(--teal);
+    color: #fff;
+    font-family: 'Playfair Display', serif;
+    font-size: 11px;
+    font-weight: 700;
+    min-width: 26px; height: 26px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+
+  /* Chip */
+  .chip {
+    display: inline-block;
+    background: var(--teal-light);
+    color: var(--teal-dark);
+    border: 1px solid rgba(26,107,114,.25);
+    border-radius: 3px;
+    font-size: 12px;
+    font-weight: 700;
+    padding: 2px 8px;
+    margin: 2px 3px 2px 0;
+    font-family: 'Source Code Pro', monospace;
+  }
+
+  /* Takeaways */
+  .takeaway-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-top: 16px;
+  }
+  @media (max-width: 680px) { .takeaway-grid { grid-template-columns: 1fr; } }
+  .takeaway-item {
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+    background: var(--cream);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 12px 14px;
+  }
+  .takeaway-icon {
+    background: var(--gold);
+    color: var(--teal-dark);
+    font-size: 12px;
+    font-weight: 700;
+    width: 22px; height: 22px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+  .takeaway-item p { font-size: 13px; line-height: 1.55; margin-bottom: 0; }
+
+  .divider { border: none; border-top: 1px solid var(--border); margin: 40px 0; }
+
+  h3.sub {
+    font-family: 'Playfair Display', serif;
+    font-size: 16px;
+    color: var(--teal-dark);
+    margin: 24px 0 10px;
+    padding-left: 12px;
+    border-left: 3px solid var(--gold);
+  }
+
+  #footer {
+    background: var(--teal-dark);
+    color: rgba(255,255,255,.5);
+    font-size: 12px;
+    padding: 18px 64px;
+    letter-spacing: .04em;
+    display: flex;
+    justify-content: space-between;
+  }
+  #footer span { color: var(--gold); }
+
+  @media print {
+    body { background: white; padding: 0; }
+    #toolbar { display: none; }
+    #document { box-shadow: none; max-width: 100%; }
+    .section { page-break-inside: avoid; }
+  }
+</style>
+</head>
+<body>
+
+<div id="toolbar">
+  <button onclick="window.print()">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+    Export / Print as PDF
+  </button>
+</div>
+
+<div id="document">
+
+  <!-- COVER -->
+  <div id="cover">
+    <div class="badge">Business &amp; Technology · Management Studies</div>
+    <h1>Digital Transformation:<br>Culture, People &amp; Change</h1>
+    <p class="subtitle">Innovation Culture · Workforce Development · Organisational Restructuring · Change Management</p>
+    <div class="meta">
+      <div class="meta-item"><strong>Subject</strong>Digital Business Strategy</div>
+      <div class="meta-item"><strong>Topic</strong>People &amp; Change in Digital Transformation</div>
+      <div class="meta-item"><strong>Level</strong>Intermediate</div>
+    </div>
+  </div>
+
+  <!-- BODY -->
+  <div id="body">
+
+    <!-- TOC -->
+    <nav id="toc">
+      <h2>Table of Contents</h2>
+      <ol>
+        <li><a href="#summary">Lecture Summary</a></li>
+        <li>
+          <a href="#innovation">Creating a Culture of Innovation &amp; Agility</a>
+          <ul class="toc-sub">
+            <li><a href="#mindset">Embracing a Growth Mindset</a></li>
+            <li><a href="#experimentation">Supporting Creativity &amp; Experimentation</a></li>
+            <li><a href="#agile">Adopting Agile Methodologies</a></li>
+          </ul>
+        </li>
+        <li>
+          <a href="#workforce">Workforce Development &amp; Digital Skills</a>
+          <ul class="toc-sub">
+            <li><a href="#continuous-learning">Continuous Learning</a></li>
+            <li><a href="#training">Training Programs &amp; Workshops</a></li>
+            <li><a href="#skills">Adapting to New Digital Skills</a></li>
+          </ul>
+        </li>
+        <li>
+          <a href="#structure">Organisational Restructuring &amp; Collaboration</a>
+          <ul class="toc-sub">
+            <li><a href="#teams">Restructuring Teams &amp; Roles</a></li>
+            <li><a href="#processes">Streamlining Processes</a></li>
+            <li><a href="#collab">Enhancing Collaboration &amp; Communication</a></li>
+          </ul>
+        </li>
+        <li>
+          <a href="#change">Change Management</a>
+          <ul class="toc-sub">
+            <li><a href="#preparation">Preparing Employees</a></li>
+            <li><a href="#communication">Clear Communication</a></li>
+            <li><a href="#monitoring">Monitoring &amp; Adapting</a></li>
+          </ul>
+        </li>
+        <li><a href="#takeaways">Key Takeaways</a></li>
+      </ol>
+    </nav>
+
+    <!-- SECTION 1: SUMMARY -->
+    <section class="section" id="summary">
+      <div class="section-header">
+        <div class="section-num">1</div>
+        <h2 class="section-title">Lecture Summary</h2>
+      </div>
+      <p>
+        Technology alone cannot deliver digital transformation — the human side of change is equally, if not more, critical. This lecture focuses on the <strong>people, culture, and organisational factors</strong> that determine whether a digital transformation succeeds or stalls.
+      </p>
+      <p>
+        Four major themes are explored. First, building a <strong>culture of innovation and agility</strong> that welcomes change and rewards experimentation. Second, <strong>developing the workforce</strong> through continuous learning, targeted training, and closing digital skill gaps. Third, making the necessary <strong>structural adjustments</strong> — rethinking teams, processes, and collaboration. Fourth, applying <strong>change management best practices</strong> to guide employees through the transition with clarity, support, and ongoing feedback.
+      </p>
+    </section>
+
+    <hr class="divider">
+
+    <!-- SECTION 2: INNOVATION CULTURE -->
+    <section class="section" id="innovation">
+      <div class="section-header">
+        <div class="section-num">2</div>
+        <h2 class="section-title">Creating a Culture of Innovation &amp; Agility</h2>
+      </div>
+
+      <div id="mindset">
+        <h3 class="sub">Embracing a Growth Mindset</h3>
+        <p>A culture of innovation begins with a <strong>mindset shift</strong> at every level of the organisation — from frontline employees to the C-suite.</p>
+        <div class="concept-card">
+          <h4>How to Foster a Growth Mindset</h4>
+          <ul>
+            <li>Encourage employees at all levels to be <strong>open to new ideas</strong>, continuously learn, and adapt.</li>
+            <li>Leaders must <strong>model the behaviour</strong> — demonstrating their own willingness to change and actively promoting adaptability.</li>
+            <li>Support the cultural shift through <strong>training programmes, workshops</strong>, and regular internal communication about innovation.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div id="experimentation">
+        <h3 class="sub">Supporting Creativity &amp; Experimentation</h3>
+        <div class="two-col">
+          <div class="data-card">
+            <div class="data-card-head">🧪 Creating Safe Spaces</div>
+            <div class="data-card-body">
+              <ul>
+                <li>Innovation labs for structured experimentation</li>
+                <li>Incentives and recognition for innovative ideas</li>
+                <li>Protected time and resources for testing</li>
+              </ul>
+            </div>
+          </div>
+          <div class="data-card">
+            <div class="data-card-head">⚡ Fail Fast, Learn Fast</div>
+            <div class="data-card-body">
+              <ul>
+                <li>Normalise failure as part of the learning process</li>
+                <li>Celebrate successful innovations publicly</li>
+                <li>Extract and share lessons from failures equally</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div class="callout">
+          <strong>Key principle:</strong> Employees must feel <strong>psychologically safe</strong> to propose and test new ideas without fear of reprisal. A supportive culture is the precondition for genuine innovation.
+        </div>
+      </div>
+
+      <div id="agile">
+        <h3 class="sub">Adopting Agile Methodologies</h3>
+        <p>Agile frameworks bring structure to innovation, enabling teams to move fast and adapt continuously.</p>
+        <div class="three-col">
+          <div class="data-card">
+            <div class="data-card-head">🔄 Scrum</div>
+            <div class="data-card-body">
+              <p>Time-boxed sprints with defined goals, sprint reviews, and retrospectives for continuous improvement.</p>
+            </div>
+          </div>
+          <div class="data-card">
+            <div class="data-card-head">📋 Kanban</div>
+            <div class="data-card-body">
+              <p>Visual workflow management that limits work-in-progress and surfaces bottlenecks in real time.</p>
+            </div>
+          </div>
+          <div class="data-card">
+            <div class="data-card-head">📅 Daily Stand-ups</div>
+            <div class="data-card-body">
+              <p>Short daily meetings that keep teams aligned, surface blockers early, and promote accountability.</p>
+            </div>
+          </div>
+        </div>
+        <div class="callout">
+          <strong>Impact:</strong> Agile practices enable organisations to respond swiftly to <strong>market changes, customer feedback, and internal challenges</strong> — significantly enhancing the ability to innovate and adapt.
+        </div>
+      </div>
+    </section>
+
+    <hr class="divider">
+
+    <!-- SECTION 3: WORKFORCE DEVELOPMENT -->
+    <section class="section" id="workforce">
+      <div class="section-header">
+        <div class="section-num">3</div>
+        <h2 class="section-title">Workforce Development &amp; Digital Skills</h2>
+      </div>
+
+      <div id="continuous-learning">
+        <h3 class="sub">Continuous Learning</h3>
+        <p>In a rapidly evolving digital landscape, a <strong>learning culture</strong> is not optional — it is a competitive necessity.</p>
+        <div class="concept-card">
+          <h4>Building a Learning Organisation</h4>
+          <ul>
+            <li>Promote <strong>lifelong learning</strong> as an organisational value, not just an HR initiative.</li>
+            <li>Offer access to educational resources — online courses, conferences, subscriptions, and internal knowledge bases.</li>
+            <li><strong>Recognise and reward</strong> employees who actively pursue learning opportunities.</li>
+            <li>A continuously learning workforce remains agile and capable of adapting to new challenges and technologies.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div id="training">
+        <h3 class="sub">Training Programmes &amp; Workshops</h3>
+        <div class="two-col">
+          <div class="concept-card">
+            <h4>Workshops</h4>
+            <ul>
+              <li>Focused on <strong>practical, hands-on training</strong> in new digital tools and methodologies.</li>
+              <li>Shorter, targeted sessions addressing specific skill needs.</li>
+              <li>Best for rapid upskilling and tool adoption.</li>
+            </ul>
+          </div>
+          <div class="concept-card">
+            <h4>Training Programmes</h4>
+            <ul>
+              <li>More in-depth experiences: <strong>certification courses, boot camps</strong>, and structured learning paths.</li>
+              <li>Tailored to address the specific needs of the organisation and its employees.</li>
+              <li>Best for deeper skill transformation and reskilling.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div id="skills">
+        <h3 class="sub">Adapting to New Digital Skills</h3>
+        <p>As new technologies emerge, organisations must <strong>regularly assess skill gaps</strong> and bridge them proactively.</p>
+        <div class="driver-card">
+          <div class="driver-card-head">🎯 Key Digital Skills to Develop</div>
+          <div class="driver-card-body">
+            <span class="chip">New Software</span>
+            <span class="chip">Data Analytics</span>
+            <span class="chip">Digital Marketing</span>
+            <span class="chip">Coding &amp; Development</span>
+            <span class="chip">Cybersecurity</span>
+            <span class="chip">Cloud Platforms</span>
+          </div>
+        </div>
+        <div class="callout">
+          <strong>Beyond technical skills:</strong> Investing in upskilling and reskilling <strong>boosts morale, increases retention, and builds a more engaged team</strong> — making workforce development both a technical and a human investment.
+        </div>
+      </div>
+    </section>
+
+    <hr class="divider">
+
+    <!-- SECTION 4: ORGANISATIONAL RESTRUCTURING -->
+    <section class="section" id="structure">
+      <div class="section-header">
+        <div class="section-num">4</div>
+        <h2 class="section-title">Organisational Restructuring &amp; Collaboration</h2>
+      </div>
+
+      <div id="teams">
+        <h3 class="sub">Restructuring Teams &amp; Roles</h3>
+        <div class="concept-card">
+          <h4>Cross-Functional Teams</h4>
+          <ul>
+            <li>Break down departmental silos by forming teams that bring together <strong>diverse skill sets</strong>: UX/UI design, data analytics, and software development.</li>
+            <li>Define <strong>clear roles and responsibilities</strong> within these teams to ensure accountability and efficiency.</li>
+            <li>Create new departments or dedicated roles focused on <strong>digital innovation</strong> where necessary.</li>
+            <li>Cross-functional collaboration enhances both agility and the quality of digital output.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div id="processes">
+        <h3 class="sub">Streamlining Processes</h3>
+        <div class="two-col">
+          <div class="data-card">
+            <div class="data-card-head">⚙️ What to Streamline</div>
+            <div class="data-card-body">
+              <ul>
+                <li>Automate manual, repetitive tasks</li>
+                <li>Revise outdated workflows</li>
+                <li>Implement digital tools for seamless data sharing</li>
+              </ul>
+            </div>
+          </div>
+          <div class="data-card">
+            <div class="data-card-head">📈 Benefits</div>
+            <div class="data-card-body">
+              <ul>
+                <li>Reduced time-to-market</li>
+                <li>Enhanced productivity</li>
+                <li>Better responsiveness to customer demands</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div class="callout">
+          <strong>Ongoing imperative:</strong> Continuous process improvement ensures that workflows remain <strong>adaptable and aligned with evolving business objectives</strong> — not just optimised once and forgotten.
+        </div>
+      </div>
+
+      <div id="collab">
+        <h3 class="sub">Enhancing Collaboration &amp; Communication</h3>
+        <div class="concept-card">
+          <h4>Building a Collaborative Culture</h4>
+          <ul>
+            <li>Foster a culture of <strong>transparency, openness, and knowledge sharing</strong> across the organisation.</li>
+            <li>Leverage <strong>digital collaboration platforms</strong> (e.g. Slack, Microsoft Teams, Notion) to connect distributed teams.</li>
+            <li>Hold regular cross-functional workshops and team meetings to align on digital initiatives and milestones.</li>
+            <li>Ensure clear communication channels so stakeholders stay informed about progress and changes.</li>
+          </ul>
+        </div>
+        <div class="callout">
+          <strong>Bigger picture:</strong> Adapting structures and processes is not just about new technology — it is about creating an <strong>agile and responsive organisation</strong> capable of capitalising on digital opportunities and maintaining competitive edge.
+        </div>
+      </div>
+    </section>
+
+    <hr class="divider">
+
+    <!-- SECTION 5: CHANGE MANAGEMENT -->
+    <section class="section" id="change">
+      <div class="section-header">
+        <div class="section-num">5</div>
+        <h2 class="section-title">Change Management</h2>
+      </div>
+      <p>Digital transformation invariably disrupts established routines and roles. Effective <strong>change management</strong> is the framework that helps employees navigate this disruption constructively — minimising resistance and maximising adoption.</p>
+
+      <div id="preparation">
+        <h3 class="sub">Preparing Employees</h3>
+        <div class="concept-card">
+          <h4>Proactive Preparation</h4>
+          <ul>
+            <li>Provide <strong>training programmes, workshops, and resources</strong> that equip employees with the skills needed for new technologies and processes.</li>
+            <li>Offer <strong>emotional and psychological support</strong> to help mitigate resistance to change.</li>
+            <li>Leaders and managers must actively <strong>guide and empower</strong> employees through transitions — not just announce them.</li>
+            <li>Employees who feel supported are far more likely to engage positively with transformation initiatives.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div id="communication">
+        <h3 class="sub">Clear &amp; Consistent Communication</h3>
+        <p>Transparent communication is the single most powerful tool for building trust and securing buy-in during transformation.</p>
+        <div class="driver-card">
+          <div class="driver-card-head">📢 What to Communicate</div>
+          <div class="driver-card-body">
+            Articulate the <strong>rationale behind the changes</strong>, their expected benefits, and how they align with the organisation's strategic objectives. Tailor messages to different stakeholder groups — addressing their specific concerns and highlighting relevant opportunities.
+          </div>
+        </div>
+        <div class="driver-card">
+          <div class="driver-card-head">📡 How to Communicate</div>
+          <div class="driver-card-body">
+            Use <strong>multiple channels</strong> to ensure information reaches everyone: town hall meetings for broad alignment, newsletters and intranet updates for ongoing visibility, and one-on-one sessions for personalised reassurance. No single channel is sufficient on its own.
+          </div>
+        </div>
+        <div class="callout">
+          <strong>Outcome:</strong> Transparent, multi-channel communication builds <strong>trust and alignment</strong> — encouraging genuine buy-in and commitment to the transformation journey rather than reluctant compliance.
+        </div>
+      </div>
+
+      <div id="monitoring">
+        <h3 class="sub">Monitoring &amp; Adapting</h3>
+        <p>Change management is not a one-time event — it requires <strong>ongoing measurement and responsiveness</strong>.</p>
+        <ul class="process-list">
+          <li>
+            <div class="process-num">1</div>
+            <div><strong>Establish Metrics &amp; KPIs</strong> — Define measurable indicators upfront: milestone completion rates, adoption rates of new processes, and employee satisfaction levels.</div>
+          </li>
+          <li>
+            <div class="process-num">2</div>
+            <div><strong>Regular Feedback Loops</strong> — Gather ongoing input from employees and stakeholders to surface challenges and uncover improvement opportunities.</div>
+          </li>
+          <li>
+            <div class="process-num">3</div>
+            <div><strong>Adjust Strategies</strong> — Use insights from feedback and metrics to make timely corrections, keeping the transformation on course and delivering intended outcomes.</div>
+          </li>
+          <li>
+            <div class="process-num">4</div>
+            <div><strong>Remain Agile</strong> — The ability to respond quickly to feedback and adapt strategies promotes organisational resilience throughout the transformation.</div>
+          </li>
+        </ul>
+        <div class="callout">
+          <strong>Best practices summary:</strong> By focusing on <strong>employee preparation, clear communication, and adaptive monitoring</strong>, organisations can lead their teams through change, foster continuous improvement, and achieve sustainable success in the digital era.
+        </div>
+      </div>
+    </section>
+
+    <hr class="divider">
+
+    <!-- SECTION 6: TAKEAWAYS -->
+    <section class="section" id="takeaways">
+      <div class="section-header">
+        <div class="section-num">6</div>
+        <h2 class="section-title">Key Takeaways</h2>
+      </div>
+      <div class="takeaway-grid">
+        <div class="takeaway-item">
+          <div class="takeaway-icon">1</div>
+          <p>A <strong>growth mindset</strong> — modelled by leaders and embedded in culture — is the foundation of digital transformation success.</p>
+        </div>
+        <div class="takeaway-item">
+          <div class="takeaway-icon">2</div>
+          <p>Employees need <strong>safe spaces to experiment and fail fast</strong>; innovation cannot thrive under fear of reprisal.</p>
+        </div>
+        <div class="takeaway-item">
+          <div class="takeaway-icon">3</div>
+          <p><strong>Agile methodologies</strong> like Scrum and Kanban make organisations more responsive to change and better at iterating toward solutions.</p>
+        </div>
+        <div class="takeaway-item">
+          <div class="takeaway-icon">4</div>
+          <p><strong>Continuous learning</strong> keeps the workforce agile — organisations must recognise and reward employees who actively pursue development.</p>
+        </div>
+        <div class="takeaway-item">
+          <div class="takeaway-icon">5</div>
+          <p>Targeted <strong>training and workshops</strong> — both hands-on and in-depth — are essential for closing digital skill gaps across the organisation.</p>
+        </div>
+        <div class="takeaway-item">
+          <div class="takeaway-icon">6</div>
+          <p><strong>Cross-functional teams</strong> with clear roles break down silos and unlock the collaborative capacity needed for digital projects.</p>
+        </div>
+        <div class="takeaway-item">
+          <div class="takeaway-icon">7</div>
+          <p><strong>Streamlining processes</strong> through automation and revised workflows reduces time-to-market and improves overall productivity.</p>
+        </div>
+        <div class="takeaway-item">
+          <div class="takeaway-icon">8</div>
+          <p>Effective <strong>change management</strong> — preparation, transparent communication, and adaptive monitoring — is what turns a technology project into an organisational transformation.</p>
+        </div>
+      </div>
+    </section>
+
+  </div><!-- /body -->
+
+  <!-- FOOTER -->
+  <div id="footer">
+    <span>Digital Business Strategy – Lecture Notes</span>
+    <span>Topic: <span>Digital Transformation: Culture, People &amp; Change</span></span>
+  </div>
+
+</div><!-- /document -->
+
+<script>
+  document.querySelectorAll('#toc a').forEach(link => {
+    link.addEventListener('click', e => {
+      e.preventDefault();
+      const target = document.querySelector(link.getAttribute('href'));
+      if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+  });
+</script>
+</body>
+</html>
