@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lecture – Voice of the Customer (VoC) Analysis Frameworks</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Source+Code+Pro:wght@400;600&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --teal: #1a6b72;
+    --teal-dark: #124f54;
+    --teal-light: #e8f4f5;
+    --gold: #c8a84b;
+    --cream: #fdf6ec;
+    --paper: #fffdf9;
+    --ink: #1e1e1e;
+    --muted: #6b6b6b;
+    --border: #d4c9b0;
+    --accent: #e85d2a;
+    --page-width: 820px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: #c8bfaf;
+    background-image: repeating-linear-gradient(
+      45deg, transparent, transparent 10px,
+      rgba(0,0,0,0.015) 10px, rgba(0,0,0,0.015) 20px
+    );
+    font-family: 'Lato', sans-serif;
+    color: var(--ink);
+    min-height: 100vh;
+    padding: 30px 20px 60px;
+  }
+
+  #toolbar {
+    max-width: var(--page-width);
+    margin: 0 auto 18px;
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+  }
+  #toolbar button {
+    background: var(--teal);
+    color: #fff;
+    border: none;
+    padding: 9px 20px;
+    border-radius: 4px;
+    font-family: 'Lato', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: .05em;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    transition: background .2s;
+  }
+  #toolbar button:hover { background: var(--teal-dark); }
+
+  #document {
+    max-width: var(--page-width);
+    margin: 0 auto;
+    background: var(--paper);
+    box-shadow: 0 4px 40px rgba(0,0,0,.25), 0 1px 4px rgba(0,0,0,.15);
+    border-radius: 2px;
+  }
+
+  /* Cover */
+  #cover {
+    background: var(--teal);
+    padding: 64px 64px 56px;
+    position: relative;
+    overflow: hidden;
+  }
+  #cover::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(
+      -45deg, transparent, transparent 18px,
+      rgba(255,255,255,.03) 18px, rgba(255,255,255,.03) 36px
+    );
+  }
+  #cover .badge {
+    display: inline-block;
+    background: var(--gold);
+    color: var(--teal-dark);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    padding: 4px 12px;
+    border-radius: 2px;
+    margin-bottom: 24px;
+    position: relative;
+  }
+  #cover h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 38px;
+    font-weight: 700;
+    color: #fff;
+    line-height: 1.2;
+    position: relative;
+    margin-bottom: 12px;
+  }
+  #cover .subtitle {
+    color: rgba(255,255,255,.65);
+    font-size: 15px;
+    letter-spacing: .04em;
+    position: relative;
+    margin-bottom: 40px;
+  }
+  #cover .meta { display: flex; gap: 32px; position: relative; }
+  #cover .meta-item { color: rgba(255,255,255,.7); font-size: 13px; }
+  #cover .meta-item strong { display: block; color: var(--gold); font-size: 11px; letter-spacing: .1em; text-transform: uppercase; margin-bottom: 3px; }
+
+  #body { padding: 48px 64px 64px; }
+
+  /* TOC */
+  #toc {
+    background: var(--cream);
+    border: 1px solid var(--border);
+    border-left: 4px solid var(--teal);
+    padding: 28px 32px;
+    margin-bottom: 48px;
+    border-radius: 2px;
+  }
+  #toc h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 18px;
+    color: var(--teal-dark);
+    margin-bottom: 18px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--border);
+  }
+  #toc ol { list-style: none; counter-reset: toc-counter; }
+  #toc > ol > li { counter-increment: toc-counter; margin-bottom: 6px; }
+  #toc a {
+    color: var(--teal);
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 700;
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    padding: 4px 6px;
+    border-radius: 3px;
+    transition: background .15s;
+  }
+  #toc a::before {
+    content: counter(toc-counter) ".";
+    color: var(--gold);
+    font-family: 'Playfair Display', serif;
+    font-size: 13px;
+    min-width: 18px;
+  }
+  #toc a:hover { background: rgba(26,107,114,.08); }
+
+  /* Sections */
+  .section { margin-bottom: 52px; scroll-margin-top: 20px; }
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 20px;
+    padding-bottom: 12px;
+    border-bottom: 2px solid var(--teal-light);
+  }
+  .section-num {
+    background: var(--teal);
+    color: #fff;
+    font-family: 'Playfair Display', serif;
+    font-size: 13px;
+    width: 32px; height: 32px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 22px;
+    color: var(--teal-dark);
+    font-weight: 600;
+  }
+
+  p { font-size: 14.5px; line-height: 1.75; color: #2c2c2c; margin-bottom: 14px; }
+  ul { margin-bottom: 14px; padding-left: 20px; }
+  li { font-size: 14.5px; line-height: 1.75; color: #2c2c2c; margin-bottom: 6px; }
+
+  /* Callout */
+  .callout {
+    background: var(--teal-light);
+    border-left: 3px solid var(--teal);
+    padding: 14px 18px;
+    margin: 16px 0;
+    border-radius: 0 4px 4px 0;
+    font-size: 13.5px;
+    line-height: 1.65;
+    color: var(--teal-dark);
+  }
+
+  /* Grids */
+  .three-col { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; margin: 20px 0; }
+  @media (max-width: 680px) { .three-col { grid-template-columns: 1fr; } }
+
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 20px 0; }
+  @media (max-width: 680px) { .two-col { grid-template-columns: 1fr; } }
+
+  /* Data card */
+  .data-card { border: 1px solid var(--border); border-radius: 4px; overflow: hidden; background: var(--paper); }
+  .data-card-head {
+    background: var(--teal);
+    color: #fff;
+    padding: 8px 14px;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: .07em;
+    text-transform: uppercase;
+  }
+  .data-card-body { padding: 12px 14px; font-size: 13.5px; background: var(--cream); }
+  .data-card-body p { font-size: 13.5px; margin-bottom: 0; color: #333; line-height: 1.6; }
+
+  /* Gold driver card */
+  .driver-card { border: 1px solid var(--border); border-radius: 4px; overflow: hidden; margin-bottom: 14px; }
+  .driver-card-head {
+    background: var(--gold);
+    color: var(--teal-dark);
+    padding: 8px 14px;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: .07em;
+    text-transform: uppercase;
+  }
+  .driver-card-body { padding: 13px 16px; font-size: 13.5px; background: var(--cream); line-height: 1.65; color: #333; }
+
+  /* Takeaways */
+  .takeaway-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-top: 16px;
+  }
+  @media (max-width: 680px) { .takeaway-grid { grid-template-columns: 1fr; } }
+  .takeaway-item {
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+    background: var(--cream);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 12px 14px;
+  }
+  .takeaway-icon {
+    background: var(--gold);
+    color: var(--teal-dark);
+    font-size: 10px;
+    font-weight: 700;
+    width: 22px; height: 22px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+  .takeaway-item p { font-size: 13px; line-height: 1.55; margin-bottom: 0; color: #2c2c2c; }
+
+  .divider { border: none; border-top: 1px solid var(--border); margin: 40px 0; }
+
+  #footer {
+    background: var(--teal-dark);
+    color: rgba(255,255,255,.5);
+    font-size: 12px;
+    padding: 18px 64px;
+    letter-spacing: .04em;
+    display: flex;
+    justify-content: space-between;
+  }
+  #footer span { color: var(--gold); }
+
+  @media print {
+    body { background: white; padding: 0; }
+    #toolbar { display: none; }
+    #document { box-shadow: none; max-width: 100%; }
+    .section { page-break-inside: avoid; }
+  }
+</style>
+</head>
+<body>
+
+<div id="toolbar">
+  <button onclick="window.print()">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+    Export / Print as PDF
+  </button>
+</div>
+
+<div id="document">
+
+  <!-- COVER -->
+  <div id="cover">
+    <div class="badge">MTF Institute of Management, Technology &amp; Finance</div>
+    <h1>Voice of the Customer (VoC) Analysis</h1>
+    <p class="subtitle">Module 8: Feedback Capture, Data Synthesis, Sentiment Diagnostics, and Root Cause Analysis</p>
+    <div class="meta">
+      <div class="meta-item"><strong>Lecturer</strong>Alex</div>
+      <div class="meta-item"><strong>Focus Area</strong>Insights Engineering</div>
+      <div class="meta-item"><strong>File Reference</strong>Voice+of+the+Customer+Analysis.pptx.pdf</div>
+    </div>
+  </div>
+
+  <!-- BODY -->
+  <div id="body">
+
+    <!-- TOC -->
+    <nav id="toc">
+      <h2>Table of Contents</h2>
+      <ol>
+        <li><a href="#voc-overview">Foundations of Voice of the Customer Analysis</a></li>
+        <li><a href="#processing-cycle">The VoC Data Acquisition and Processing Loop</a></li>
+        <li><a href="#diagnostics-synthesis">Advanced Analytics: Sentiments &amp; Root Causes</a></li>
+      </ol>
+    </nav>
+
+    <!-- SECTION 1: FOUNDATIONS OF VOC -->
+    <section class="section" id="voc-overview">
+      <div class="section-header">
+        <div class="section-num">1</div>
+        <h2 class="section-title">Foundations of Voice of the Customer Analysis</h2>
+      </div>
+      <p>
+        Voice of the Customer (VoC) Analysis is a systematic process of capturing, analyzing, and interpreting customer feedback and preferences to understand their needs, expectations, and perceptions of a product or service. It serves as an essential intelligence layer for customer-centric organizations.
+      </p>
+      <p>
+        By establishing a structured VoC program, organizations can translate qualitative customer expressions into objective, data-driven targets. This systematic mapping allows businesses to align product features, service standards, and strategic directions directly with market demand.
+      </p>
+
+      <div class="callout">
+        <strong>The Ultimate Operational Objective:</strong> The final goal of Voice of the Customer analysis is to generate actionable insights that can drive improvements in products, services, and overall customer experiences. Rather than archiving high-level metrics, these insights must actively inform corporate decision-making and guide specific strategic initiatives aimed at resolving underlying customer needs and enhancing retention.
+      </div>
+    </section>
+
+    <hr class="divider">
+
+    <!-- SECTION 2: THE DATA PROCESSING CYCLE -->
+    <section class="section" id="processing-cycle">
+      <div class="section-header">
+        <div class="section-num">2</div>
+        <h2 class="section-title">The VoC Data Acquisition and Processing Loop</h2>
+      </div>
+      <p>
+        Executing an effective Voice of the Customer program requires following a continuous data-handling pipeline to keep collected feedback organized, secure, and valuable:
+      </p>
+
+      <div class="two-col">
+        <div class="driver-card">
+          <div class="driver-card-head">Phase 1: Multi-Source Gathering</div>
+          <div class="driver-card-body">
+            Feedback is collected across several internal and external channels, including surveys, face-to-face interviews, social media platforms, online reviews, and direct customer service interactions. This framework includes:
+            <ul style="margin-top: 6px; padding-left: 15px;">
+              <li><strong>Solicited Feedback:</strong> Structured inputs captured via target surveys and service feedback forms.</li>
+              <li><strong>Unsolicited Feedback:</strong> Organic expressions gathered from social media comments and independent review portals.</li>
+            </ul>
+          </div>
+        </div>
+        <div class="driver-card">
+          <div class="driver-card-head">Phase 2: Sanitation &amp; Structuring</div>
+          <div class="driver-card-body">
+            Once raw feedback is gathered, it must be organized and processed for clear evaluation. This step involves categorizing responses based on themes or topics, scrubbing duplicate or irrelevant records, and structuring data into formats suitable for analytical systems.
+          </div>
+        </div>
+      </div>
+
+      <div class="two-col">
+        <div class="driver-card">
+          <div class="driver-card-head">Phase 3: Deep Pattern Analysis</div>
+          <div class="driver-card-body">
+            Analysts process the organized data to isolate trends and insights. This step uses quantitative analysis to spot trends in survey data, alongside qualitative analysis to uncover the real reasons driving customer feedback. Data visualization tools—such as charts, graphs, and word clouds—help illustrate key findings.
+          </div>
+        </div>
+        <div class="driver-card">
+          <div class="driver-card-head">Phase 4: Continuous Optimization</div>
+          <div class="driver-card-body">
+            VoC analysis is a continuous process rather than a one-time project. Organizations must regularly monitor feedback, track sentiment changes over time, and adjust operations accordingly. This iterative cycle keeps the brand responsive to shifting customer expectations and market dynamics.
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <hr class="divider">
+
+    <!-- SECTION 3: DIAGNOSTICS & SYNTHESIS -->
+    <section class="section" id="diagnostics-synthesis">
+      <div class="section-header">
+        <div class="section-num">3</div>
+        <h2 class="section-title">Advanced Analytics: Sentiments &amp; Root Causes</h2>
+      </div>
+      <p>
+        To get real value out of VoC data, organizations must look beyond surface-level comments to discover the underlying reasons for customer issues or praises.
+      </p>
+
+      <div class="three-col">
+        <div class="data-card">
+          <div class="data-card-head">Thematic Categorization</div>
+          <div class="data-card-body">
+            <p>Teams group raw records to find common themes and viewpoints shared by customers. This includes cataloging specific areas of satisfaction, dissatisfaction, user friction points, and operational areas ripe for improvement.</p>
+          </div>
+        </div>
+        <div class="data-card">
+          <div class="data-card-head">Sentiment Analytics</div>
+          <div class="data-card-body">
+            <p>Automated or manual sentiment analysis techniques are used to sort feedback into clear buckets: positive, neutral, or negative. This sorting helps quantify customer emotion and measure how macro-level sentiment shifts over time.</p>
+          </div>
+        </div>
+        <div class="data-card">
+          <div class="data-card-head">Root Cause Diagnostics</div>
+          <div class="data-card-body">
+            <p>Analysts dig deeper than surface remarks to understand the root causes of customer issues. This means investigating systemic factors driving dissatisfaction, such as product quality issues, service delivery delays, or communication misalignments.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="takeaway-grid">
+        <div class="takeaway-item">
+          <div class="takeaway-icon">✓</div>
+          <p><strong>Informed Prioritization:</strong> Conducting systematic VoC analysis provides valuable insights into customer perceptions and preferences, helping leaders prioritize initiatives and make informed choices.</p>
+        </div>
+        <div class="takeaway-item">
+          <div class="takeaway-icon">✓</div>
+          <p><strong>Targeted Experiences:</strong> Diving into root causes and sentiment trends helps organizations design and deliver experiences that resonate with their target audience.</p>
+        </div>
+      </div>
+    </section>
+
+  </div><!-- /body -->
+
+  <!-- FOOTER -->
+  <div id="footer">
+    <span>MTF Institute – Course Lecture Notes</span>
+    <span>Topic: <span>Voice of the Customer Frameworks</span></span>
+  </div>
+
+</div><!-- /document -->
+
+<script>
+  document.querySelectorAll('#toc a').forEach(link => {
+    link.addEventListener('click', e => {
+      e.preventDefault();
+      const target = document.querySelector(link.getAttribute('href'));
+      if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+  });
+</script>
+</body>
+</html>

@@ -1,0 +1,621 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lecture – The Management of IT Resources</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Source+Code+Pro:wght@400;600&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --teal: #1a6b72;
+    --teal-dark: #124f54;
+    --teal-light: #e8f4f5;
+    --gold: #c8a84b;
+    --cream: #fdf6ec;
+    --paper: #fffdf9;
+    --ink: #1e1e1e;
+    --muted: #6b6b6b;
+    --border: #d4c9b0;
+    --accent: #e85d2a;
+    --page-width: 820px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: #c8bfaf;
+    background-image: repeating-linear-gradient(
+      45deg, transparent, transparent 10px,
+      rgba(0,0,0,0.015) 10px, rgba(0,0,0,0.015) 20px
+    );
+    font-family: 'Lato', sans-serif;
+    color: var(--ink);
+    min-height: 100vh;
+    padding: 30px 20px 60px;
+  }
+
+  #toolbar {
+    max-width: var(--page-width);
+    margin: 0 auto 18px;
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+  }
+  #toolbar button {
+    background: var(--teal);
+    color: #fff;
+    border: none;
+    padding: 9px 20px;
+    border-radius: 4px;
+    font-family: 'Lato', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: .05em;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    transition: background .2s;
+  }
+  #toolbar button:hover { background: var(--teal-dark); }
+
+  #document {
+    max-width: var(--page-width);
+    margin: 0 auto;
+    background: var(--paper);
+    box-shadow: 0 4px 40px rgba(0,0,0,.25), 0 1px 4px rgba(0,0,0,.15);
+    border-radius: 2px;
+  }
+
+  /* Cover */
+  #cover {
+    background: var(--teal);
+    padding: 64px 64px 56px;
+    position: relative;
+    overflow: hidden;
+  }
+  #cover::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(
+      -45deg, transparent, transparent 18px,
+      rgba(255,255,255,.03) 18px, rgba(255,255,255,.03) 36px
+    );
+  }
+  #cover .badge {
+    display: inline-block;
+    background: var(--gold);
+    color: var(--teal-dark);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    padding: 4px 12px;
+    border-radius: 2px;
+    margin-bottom: 24px;
+    position: relative;
+  }
+  #cover h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 38px;
+    font-weight: 700;
+    color: #fff;
+    line-height: 1.2;
+    position: relative;
+    margin-bottom: 12px;
+  }
+  #cover .subtitle {
+    color: rgba(255,255,255,.65);
+    font-size: 15px;
+    letter-spacing: .04em;
+    position: relative;
+    margin-bottom: 40px;
+  }
+  #cover .meta { display: flex; gap: 32px; position: relative; }
+  #cover .meta-item { color: rgba(255,255,255,.7); font-size: 13px; }
+  #cover .meta-item strong { display: block; color: var(--gold); font-size: 11px; letter-spacing: .1em; text-transform: uppercase; margin-bottom: 3px; }
+
+  #body { padding: 48px 64px 64px; }
+
+  /* TOC */
+  #toc {
+    background: var(--cream);
+    border: 1px solid var(--border);
+    border-left: 4px solid var(--teal);
+    padding: 28px 32px;
+    margin-bottom: 48px;
+    border-radius: 2px;
+  }
+  #toc h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 18px;
+    color: var(--teal-dark);
+    margin-bottom: 18px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--border);
+  }
+  #toc ol { list-style: none; counter-reset: toc-counter; }
+  #toc > ol > li { counter-increment: toc-counter; margin-bottom: 6px; }
+  #toc a {
+    color: var(--teal);
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 700;
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    padding: 4px 6px;
+    border-radius: 3px;
+    transition: background .15s;
+  }
+  #toc a::before {
+    content: counter(toc-counter) ".";
+    color: var(--gold);
+    font-family: 'Playfair Display', serif;
+    font-size: 13px;
+    min-width: 18px;
+  }
+  #toc a:hover { background: rgba(26,107,114,.08); }
+  #toc .toc-sub { list-style: none; padding-left: 26px; margin-top: 4px; }
+  #toc .toc-sub li { margin-bottom: 3px; }
+  #toc .toc-sub a { font-weight: 400; font-size: 13px; color: var(--muted); }
+  #toc .toc-sub a::before { display: none; }
+
+  /* Sections */
+  .section { margin-bottom: 52px; scroll-margin-top: 20px; }
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 20px;
+    padding-bottom: 12px;
+    border-bottom: 2px solid var(--teal-light);
+  }
+  .section-num {
+    background: var(--teal);
+    color: #fff;
+    font-family: 'Playfair Display', serif;
+    font-size: 13px;
+    width: 32px; height: 32px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 22px;
+    color: var(--teal-dark);
+    font-weight: 600;
+  }
+
+  p { font-size: 14.5px; line-height: 1.75; color: #2c2c2c; margin-bottom: 14px; }
+
+  /* Concept card */
+  .concept-card {
+    background: var(--cream);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 16px 20px;
+    margin-bottom: 12px;
+  }
+  .concept-card h4 {
+    font-family: 'Playfair Display', serif;
+    font-size: 14px;
+    color: var(--teal-dark);
+    margin-bottom: 6px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .concept-card h4::before { content: '◆'; color: var(--gold); font-size: 10px; }
+  .concept-card ul { padding-left: 18px; margin: 0; }
+  .concept-card li { font-size: 13.5px; line-height: 1.65; color: #333; margin-bottom: 4px; }
+
+  /* Callout */
+  .callout {
+    background: var(--teal-light);
+    border-left: 3px solid var(--teal);
+    padding: 14px 18px;
+    margin: 16px 0;
+    border-radius: 0 4px 4px 0;
+    font-size: 13.5px;
+    line-height: 1.65;
+    color: var(--teal-dark);
+  }
+  .callout strong { color: var(--teal-dark); }
+
+  /* Grids */
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin: 20px 0; }
+  .three-col { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; margin: 20px 0; }
+  @media (max-width: 680px) { .two-col, .three-col { grid-template-columns: 1fr; } }
+
+  /* Data card */
+  .data-card { border: 1px solid var(--border); border-radius: 4px; overflow: hidden; }
+  .data-card-head {
+    background: var(--teal);
+    color: #fff;
+    padding: 8px 14px;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: .07em;
+    text-transform: uppercase;
+  }
+  .data-card-body { padding: 12px 14px; font-size: 13px; background: var(--cream); }
+  .data-card-body li { margin-bottom: 5px; list-style-position: inside; color: #333; line-height: 1.55; }
+  .data-card-body p { font-size: 13px; margin-bottom: 0; color: #333; line-height: 1.6; }
+
+  /* Gold driver card */
+  .driver-card { border: 1px solid var(--border); border-radius: 4px; overflow: hidden; margin-bottom: 14px; }
+  .driver-card-head {
+    background: var(--gold);
+    color: var(--teal-dark);
+    padding: 8px 14px;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: .07em;
+    text-transform: uppercase;
+  }
+  .driver-card-body { padding: 13px 16px; font-size: 13.5px; background: var(--cream); line-height: 1.65; color: #333; }
+
+  /* Flow list */
+  .flow-list { list-style: none; padding: 0; margin: 16px 0; }
+  .flow-list li {
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--border);
+    font-size: 13.5px;
+    line-height: 1.6;
+    color: #2c2c2c;
+  }
+  .flow-list li:last-child { border-bottom: none; }
+  .flow-num {
+    background: var(--teal);
+    color: #fff;
+    font-family: 'Playfair Display', serif;
+    font-size: 11px;
+    font-weight: 700;
+    min-width: 26px; height: 26px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+
+  /* Takeaways */
+  .takeaway-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-top: 16px;
+  }
+  @media (max-width: 680px) { .takeaway-grid { grid-template-columns: 1fr; } }
+  .takeaway-item {
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+    background: var(--cream);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 12px 14px;
+  }
+  .takeaway-icon {
+    background: var(--gold);
+    color: var(--teal-dark);
+    font-size: 12px;
+    font-weight: 700;
+    width: 22px; height: 22px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+  .takeaway-item p { font-size: 13px; line-height: 1.55; margin-bottom: 0; }
+
+  .divider { border: none; border-top: 1px solid var(--border); margin: 40px 0; }
+
+  h3.sub {
+    font-family: 'Playfair Display', serif;
+    font-size: 16px;
+    color: var(--teal-dark);
+    margin: 24px 0 10px;
+    padding-left: 12px;
+    border-left: 3px solid var(--gold);
+  }
+
+  #footer {
+    background: var(--teal-dark);
+    color: rgba(255,255,255,.5);
+    font-size: 12px;
+    padding: 18px 64px;
+    letter-spacing: .04em;
+    display: flex;
+    justify-content: space-between;
+  }
+  #footer span { color: var(--gold); }
+
+  @media print {
+    body { background: white; padding: 0; }
+    #toolbar { display: none; }
+    #document { box-shadow: none; max-width: 100%; }
+    .section { page-break-inside: avoid; }
+  }
+</style>
+</head>
+<body>
+
+<div id="toolbar">
+  <button onclick="window.print()">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+    Export / Print as PDF
+  </button>
+</div>
+
+<div id="document">
+
+  <!-- COVER -->
+  <div id="cover">
+    <div class="badge">Resource Management · Strategic Sourcing</div>
+    <h1>The Management of IT Resources</h1>
+    <p class="subtitle">Comparative Analysis of Outstaffing, Outsourcing, and In-House Paradigms</p>
+    <div class="meta">
+      <div class="meta-item"><strong>Subject</strong>IT Governance</div>
+      <div class="meta-item"><strong>Topic</strong>Staffing &amp; Resource Allocation</div>
+      <div class="meta-item"><strong>Level</strong>Intermediate</div>
+    </div>
+  </div>
+
+  <!-- BODY -->
+  <div id="body">
+
+    <!-- TOC -->
+    <nav id="toc">
+      <h2>Table of Contents</h2>
+      <ol>
+        <li><a href="#summary">Lecture Summary</a></li>
+        <li>
+          <a href="#paradigms">The Three Resource Paradigms</a>
+          <ul class="toc-sub">
+            <li><a href="#mod-outstaff">Outstaffing Framework</a></li>
+            <li><a href="#mod-outsource">Outsourcing Framework</a></li>
+            <li><a href="#mod-inhouse">In-House Framework</a></li>
+          </ul>
+        </li>
+        <li>
+          <a href="#evaluation">Comparative Evaluation Matrix</a>
+          <ul class="toc-sub">
+            <li><a href="#pros-cons">Advantages and Disadvantages</a></li>
+          </ul>
+        </li>
+        <li>
+          <a href="#scenarios">Strategic Execution Scenarios</a>
+          <ul class="toc-sub">
+            <li><a href="#case-outstaff">Mobile App Scenario</a></li>
+            <li><a href="#case-outsource">Website Development Scenario</a></li>
+            <li><a href="#case-inhouse">Internal Software Scenario</a></li>
+          </ul>
+        </li>
+        <li><a href="#takeaways">Key Takeaways</a></li>
+      </ol>
+    </nav>
+
+    <!-- SECTION 1: SUMMARY -->
+    <section class="section" id="summary">
+      <div class="section-header">
+        <div class="section-num">1</div>
+        <h2 class="section-title">Lecture Summary</h2>
+      </div>
+      <p>
+        The management of IT resources stands as a core operational element of any modern business[cite: 1]. One of the most critical decisions leadership faces is determining the balance between outstaffing, outsourcing, or utilizing in-house teams[cite: 1]. 
+      </p>
+      <p>
+        Each resource sourcing strategy carries distinct benefits and risks[cite: 1]. Companies must analyze these variables against their specific budgets, timelines, and operational needs to maximize efficiency and minimize overhead costs[cite: 1].
+      </p>
+    </section>
+
+    <hr class="divider">
+
+    <!-- SECTION 2: PARADIGMS -->
+    <section class="section" id="paradigms">
+      <div class="section-header">
+        <div class="section-num">2</div>
+        <h2 class="section-title">The Three Resource Paradigms</h2>
+      </div>
+      <p>Organizations navigate staffing needs through three primary operational lanes, balancing direct oversight against cost optimization[cite: 1].</p>
+
+      <div class="three-col">
+        <div id="mod-outstaff" class="data-card">
+          <div class="data-card-head">👥 Outstaffing</div>
+          <div class="data-card-body">
+            <p>Hiring remote specialists who remain legally employed by a third-party vendor[cite: 1]. These workers report directly to the client company's management team[cite: 1]. This model is typically used for shorter-term timelines or to quickly close specific skills gaps[cite: 1].</p>
+          </div>
+        </div>
+        <div id="mod-outsource" class="data-card">
+          <div class="data-card-head">📦 Outsourcing</div>
+          <div class="data-card-body">
+            <p>Contracting an external service provider to manage and complete an entire business function or process (e.g., software construction, customer care, or marketing)[cite: 1]. The external vendor retains full resource management and delivery accountability[cite: 1].</p>
+          </div>
+        </div>
+        <div id="mod-inhouse" class="data-card">
+          <div class="data-card-head">🏠 In-House</div>
+          <div class="data-card-body">
+            <p>Recruiting and hiring employees who contract directly with the company[cite: 1]. These internal team members are fully responsible for delivering required tasks, working completely within the corporate structure and hierarchy[cite: 1].</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <hr class="divider">
+
+    <!-- SECTION 3: EVALUATION -->
+    <section class="section" id="evaluation">
+      <div class="section-header">
+        <div class="section-num">3</div>
+        <h2 class="section-title">Comparative Evaluation Matrix</h2>
+      </div>
+      <p>Selecting an asset sourcing model requires a clear understanding of financial, cultural, and operational trade-offs[cite: 1].</p>
+
+      <div id="pros-cons">
+        <h3 class="sub">Outstaffing Dynamics</h3>
+        <div class="two-col">
+          <div class="data-card">
+            <div class="data-card-head">✅ Outstaffing Pros</div>
+            <div class="data-card-body">
+              <ul>
+                <li><strong>Cost Reduction:</strong> Mitigates expenses by cutting internal employee benefits, dedicated facilities, and general overhead[cite: 1].</li>
+                <li><strong>Flexibility:</strong> Allows companies to scale up or down on an as-needed basis[cite: 1].</li>
+                <li><strong>Talent Pool:</strong> Unlocks access to skilled specialists across different geographic areas[cite: 1].</li>
+              </ul>
+            </div>
+          </div>
+          <div class="data-card">
+            <div class="data-card-head">❌ Outstaffing Cons</div>
+            <div class="data-card-body">
+              <ul>
+                <li><strong>Communication Blocks:</strong> Working across different time zones can create structural communication barriers[cite: 1].</li>
+                <li><strong>Reduced Control:</strong> Because the talent is legally employed by a vendor, client firms may experience a lack of direct control over daily schedules and workflows[cite: 1].</li>
+                <li><strong>Cultural Gaps:</strong> Cultural differences between teams can spark collaboration friction[cite: 1].</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <h3 class="sub">Outsourcing Dynamics</h3>
+        <div class="two-col">
+          <div class="data-card">
+            <div class="data-card-head">✅ Outsourcing Pros</div>
+            <div class="data-card-body">
+              <ul>
+                <li><strong>Overhead Optimization:</strong> The vendor assumes all employee costs and internal overhead expenses[cite: 1].</li>
+                <li><strong>Specialized Expertise:</strong> Grants instant access to highly specialized, pre-assembled technical teams[cite: 1].</li>
+                <li><strong>Core Focus:</strong> Frees up leadership to concentrate heavily on primary business competencies[cite: 1].</li>
+              </ul>
+            </div>
+          </div>
+          <div class="data-card">
+            <div class="data-card-head">❌ Outsourcing Cons</div>
+            <div class="data-card-body">
+              <ul>
+                <li><strong>Quality Fluctuations:</strong> The vendor's QA metrics might not align with the internal standards of the client firm[cite: 1].</li>
+                <li><strong>Siloed Contact:</strong> Offshoring processes can lead to communication gaps due to geographic borders and time differences[cite: 1].</li>
+                <li><strong>Low Transparency:</strong> Delegating resource management leaves the client with limited control over daily operations and deliverables[cite: 1].</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <h3 class="sub">In-House Dynamics</h3>
+        <div class="two-col">
+          <div class="data-card">
+            <div class="data-card-head">✅ In-House Pros</div>
+            <div class="data-card-body">
+              <ul>
+                <li><strong>Absolute Control:</strong> Ensures total command over daily operational schedules, milestones, and deliverables[cite: 1].</li>
+                <li><strong>Smooth Collaboration:</strong> Teams communicate more naturally and effectively across internal corporate departments[cite: 1].</li>
+                <li><strong>Cultural Alignment:</strong> Direct hires natively match the organization’s mission, core values, and corporate culture[cite: 1].</li>
+              </ul>
+            </div>
+          </div>
+          <div class="data-card">
+            <div class="data-card-head">❌ In-House Cons</div>
+            <div class="data-card-body">
+              <ul>
+                <li><strong>High Expense:</strong> Demands heavy long-term budgets for corporate health benefits, workspace footprint, and operational equipment[cite: 1].</li>
+                <li><strong>Skill Constraints:</strong> Internal rosters may have narrow expertise, resulting in skills gaps that are slow to fill[cite: 1].</li>
+                <li><strong>Rigidity:</strong> Fixed headcounts reduce an organization's agility when responding to changing market conditions[cite: 1].</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <hr class="divider">
+
+    <!-- SECTION 4: SCENARIOS -->
+    <section class="section" id="scenarios">
+      <div class="section-header">
+        <div class="section-num">4</div>
+        <h2 class="section-title">Strategic Execution Scenarios</h2>
+      </div>
+      <p>Reviewing how companies select their sourcing models based on project scope, target budgets, and internal skill levels[cite: 1].</p>
+
+      <div id="case-outstaff" class="driver-card">
+        <div class="driver-card-head">Case A: Outstaffing Target (Mobile App Deployment)</div>
+        <div class="driver-card-body">
+          <strong>Context:</strong> An enterprise needs to build a custom mobile app but lacks the necessary development skills internally[cite: 1].<br>
+          <strong>Execution:</strong> Instead of onboarding permanent staff, the firm secures outstaffed remote specialists via an external vendor[cite: 1]. The third-party vendor manages legal employment and baseline resources, while the client retains direct project direction[cite: 1].
+        </div>
+      </div>
+
+      <div id="case-outsource" class="driver-card">
+        <div class="driver-card-head">Case B: Outsourcing Target (Website Development)</div>
+        <div class="driver-card-body">
+          <strong>Context:</strong> A firm needs to build a new public website but lacks web development expertise in-house[cite: 1].<br>
+          <strong>Execution:</strong> The company outsources the entire lifecycle to a specialized web development agency[cite: 1]. This external vendor accepts complete responsibility for project management, delivery timelines, and budget constraints[cite: 1].
+        </div>
+      </div>
+
+      <div id="case-inhouse" class="driver-card">
+        <div class="driver-card-head">Case C: In-House Target (Internal Enterprise Software)</div>
+        <div class="driver-card-body">
+          <strong>Context:</strong> An organization wants to create a proprietary software application for internal staff use[cite: 1].<br>
+          <strong>Execution:</strong> The enterprise recruits and assigns full-time, internal employees to manage the project[cite: 1]. This internal team retains complete control over development, keeping the codebase aligned with corporate security and culture[cite: 1].
+        </div>
+      </div>
+    </section>
+
+    <hr class="divider">
+
+    <!-- SECTION 5: TAKEAWAYS -->
+    <section class="section" id="takeaways">
+      <div class="section-header">
+        <div class="section-num">5</div>
+        <h2 class="section-title">Key Takeaways</h2>
+      </div>
+      
+      <p>
+        The ideal IT sourcing model depends entirely on a company's specific goals, available budget, and desired level of oversight[cite: 1].
+      </p>
+
+      <div class="takeaway-grid">
+        <div class="takeaway-item">
+          <div class="takeaway-icon">1</div>
+          <p><strong>Outstaffing &amp; Outsourcing</strong> serve as excellent strategies to lower overhead costs and quickly access global talent pools[cite: 1].</p>
+        </div>
+        <div class="takeaway-item">
+          <div class="takeaway-icon">2</div>
+          <p><strong>In-House Sourcing</strong> provides unparalleled operational control, smooth internal collaboration, and deep cultural alignment[cite: 1].</p>
+        </div>
+        <div class="takeaway-item">
+          <div class="takeaway-icon">3</div>
+          <p><strong>Risk Variables</strong> like time zone communication gaps, quality control issues, and rigid overhead costs must be weighed against project scope[cite: 1].</p>
+        </div>
+        <div class="takeaway-item">
+          <div class="takeaway-icon">4</div>
+          <p><strong>Strategic Balancing</strong> requires matching the sourcing model to project timelines, ensuring the right mix of flexibility and oversight[cite: 1].</p>
+        </div>
+      </div>
+    </section>
+
+  </div><!-- /body -->
+
+  <!-- FOOTER -->
+  <div id="footer">
+    <span>IT Management Strategy – Lecture Notes</span>
+    <span>Topic: <span>Sourcing Frameworks (Outsource vs Outstaff vs In-house)</span></span>
+  </div>
+
+</div><!-- /document -->
+
+<script>
+  document.querySelectorAll('#toc a').forEach(link => {
+    link.addEventListener('click', e => {
+      e.preventDefault();
+      const target = document.querySelector(link.getAttribute('href'));
+      if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+  });
+</script>
+</body>
+</html>

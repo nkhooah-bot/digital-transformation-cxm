@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lecture – Emotional Experience Design</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Source+Code+Pro:wght@400;600&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --teal: #1a6b72;
+    --teal-dark: #124f54;
+    --teal-light: #e8f4f5;
+    --gold: #c8a84b;
+    --cream: #fdf6ec;
+    --paper: #fffdf9;
+    --ink: #1e1e1e;
+    --muted: #6b6b6b;
+    --border: #d4c9b0;
+    --accent: #e85d2a;
+    --page-width: 820px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: #c8bfaf;
+    background-image: repeating-linear-gradient(
+      45deg, transparent, transparent 10px,
+      rgba(0,0,0,0.015) 10px, rgba(0,0,0,0.015) 20px
+    );
+    font-family: 'Lato', sans-serif;
+    color: var(--ink);
+    min-height: 100vh;
+    padding: 30px 20px 60px;
+  }
+
+  #toolbar {
+    max-width: var(--page-width);
+    margin: 0 auto 18px;
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+  }
+  #toolbar button {
+    background: var(--teal);
+    color: #fff;
+    border: none;
+    padding: 9px 20px;
+    border-radius: 4px;
+    font-family: 'Lato', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: .05em;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    transition: background .2s;
+  }
+  #toolbar button:hover { background: var(--teal-dark); }
+
+  #document {
+    max-width: var(--page-width);
+    margin: 0 auto;
+    background: var(--paper);
+    box-shadow: 0 4px 40px rgba(0,0,0,.25), 0 1px 4px rgba(0,0,0,.15);
+    border-radius: 2px;
+  }
+
+  /* Cover */
+  #cover {
+    background: var(--teal);
+    padding: 64px 64px 56px;
+    position: relative;
+    overflow: hidden;
+  }
+  #cover::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(
+      -45deg, transparent, transparent 18px,
+      rgba(255,255,255,.03) 18px, rgba(255,255,255,.03) 36px
+    );
+  }
+  #cover .badge {
+    display: inline-block;
+    background: var(--gold);
+    color: var(--teal-dark);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    padding: 4px 12px;
+    border-radius: 2px;
+    margin-bottom: 24px;
+    position: relative;
+  }
+  #cover h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 38px;
+    font-weight: 700;
+    color: #fff;
+    line-height: 1.2;
+    position: relative;
+    margin-bottom: 12px;
+  }
+  #cover .subtitle {
+    color: rgba(255,255,255,.65);
+    font-size: 15px;
+    letter-spacing: .04em;
+    position: relative;
+    margin-bottom: 40px;
+  }
+  #cover .meta { display: flex; gap: 32px; position: relative; }
+  #cover .meta-item { color: rgba(255,255,255,.7); font-size: 13px; }
+  #cover .meta-item strong { display: block; color: var(--gold); font-size: 11px; letter-spacing: .1em; text-transform: uppercase; margin-bottom: 3px; }
+
+  #body { padding: 48px 64px 64px; }
+
+  /* TOC */
+  #toc {
+    background: var(--cream);
+    border: 1px solid var(--border);
+    border-left: 4px solid var(--teal);
+    padding: 28px 32px;
+    margin-bottom: 48px;
+    border-radius: 2px;
+  }
+  #toc h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 18px;
+    color: var(--teal-dark);
+    margin-bottom: 18px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--border);
+  }
+  #toc ol { list-style: none; counter-reset: toc-counter; }
+  #toc > ol > li { counter-increment: toc-counter; margin-bottom: 6px; }
+  #toc a {
+    color: var(--teal);
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 700;
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    padding: 4px 6px;
+    border-radius: 3px;
+    transition: background .15s;
+  }
+  #toc a::before {
+    content: counter(toc-counter) ".";
+    color: var(--gold);
+    font-family: 'Playfair Display', serif;
+    font-size: 13px;
+    min-width: 18px;
+  }
+  #toc a:hover { background: rgba(26,107,114,.08); }
+
+  /* Sections */
+  .section { margin-bottom: 52px; scroll-margin-top: 20px; }
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 20px;
+    padding-bottom: 12px;
+    border-bottom: 2px solid var(--teal-light);
+  }
+  .section-num {
+    background: var(--teal);
+    color: #fff;
+    font-family: 'Playfair Display', serif;
+    font-size: 13px;
+    width: 32px; height: 32px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 22px;
+    color: var(--teal-dark);
+    font-weight: 600;
+  }
+
+  p { font-size: 14.5px; line-height: 1.75; color: #2c2c2c; margin-bottom: 14px; }
+  ul { margin-bottom: 14px; padding-left: 20px; }
+  li { font-size: 14.5px; line-height: 1.75; color: #2c2c2c; margin-bottom: 6px; }
+
+  /* Callout */
+  .callout {
+    background: var(--teal-light);
+    border-left: 3px solid var(--teal);
+    padding: 14px 18px;
+    margin: 16px 0;
+    border-radius: 0 4px 4px 0;
+    font-size: 13.5px;
+    line-height: 1.65;
+    color: var(--teal-dark);
+  }
+
+  /* Grids */
+  .three-col { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; margin: 20px 0; }
+  @media (max-width: 680px) { .three-col { grid-template-columns: 1fr; } }
+
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 20px 0; }
+  @media (max-width: 680px) { .two-col { grid-template-columns: 1fr; } }
+
+  /* Data card */
+  .data-card { border: 1px solid var(--border); border-radius: 4px; overflow: hidden; background: var(--paper); }
+  .data-card-head {
+    background: var(--teal);
+    color: #fff;
+    padding: 8px 14px;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: .07em;
+    text-transform: uppercase;
+  }
+  .data-card-body { padding: 12px 14px; font-size: 13.5px; background: var(--cream); }
+  .data-card-body p { font-size: 13.5px; margin-bottom: 0; color: #333; line-height: 1.6; }
+
+  /* Gold driver card */
+  .driver-card { border: 1px solid var(--border); border-radius: 4px; overflow: hidden; margin-bottom: 14px; }
+  .driver-card-head {
+    background: var(--gold);
+    color: var(--teal-dark);
+    padding: 8px 14px;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: .07em;
+    text-transform: uppercase;
+  }
+  .driver-card-body { padding: 13px 16px; font-size: 13.5px; background: var(--cream); line-height: 1.65; color: #333; }
+
+  /* Takeaways */
+  .takeaway-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-top: 16px;
+  }
+  @media (max-width: 680px) { .takeaway-grid { grid-template-columns: 1fr; } }
+  .takeaway-item {
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+    background: var(--cream);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 12px 14px;
+  }
+  .takeaway-icon {
+    background: var(--gold);
+    color: var(--teal-dark);
+    font-size: 10px;
+    font-weight: 700;
+    width: 22px; height: 22px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+  .takeaway-item p { font-size: 13px; line-height: 1.55; margin-bottom: 0; color: #2c2c2c; }
+
+  .divider { border: none; border-top: 1px solid var(--border); margin: 40px 0; }
+
+  #footer {
+    background: var(--teal-dark);
+    color: rgba(255,255,255,.5);
+    font-size: 12px;
+    padding: 18px 64px;
+    letter-spacing: .04em;
+    display: flex;
+    justify-content: space-between;
+  }
+  #footer span { color: var(--gold); }
+
+  @media print {
+    body { background: white; padding: 0; }
+    #toolbar { display: none; }
+    #document { box-shadow: none; max-width: 100%; }
+    .section { page-break-inside: avoid; }
+  }
+</style>
+</head>
+<body>
+
+<div id="toolbar">
+  <button onclick="window.print()">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+    Export / Print as PDF
+  </button>
+</div>
+
+<div id="document">
+
+  <!-- COVER -->
+  <div id="cover">
+    <div class="badge">MTF Institute of Management, Technology &amp; Finance</div>
+    <h1>Emotional Experience Design</h1>
+    <p class="subtitle">Module 9: Affective Mapping, Empathetic Personalization, and Relational Resonance</p>
+    <div class="meta">
+      <div class="meta-item"><strong>Lecturer</strong>Alex</div>
+      <div class="meta-item"><strong>Focus Area</strong>Experience Strategy &amp; Psychology</div>
+      <div class="meta-item"><strong>File Reference</strong>Emotional+Experience+Design.pptx.pdf</div>
+    </div>
+  </div>
+
+  <!-- BODY -->
+  <div id="body">
+
+    <!-- TOC -->
+    <nav id="toc">
+      <h2>Table of Contents</h2>
+      <ol>
+        <li><a href="#emotional-foundations">Foundations of Emotional Experience Design</a></li>
+        <li><a href="#tactical-frameworks">Tactical Mapping and Core Execution Principles</a></li>
+        <li><a href="#measurement-optimization">Measurement, Valuation, and Iterative Optimization</a></li>
+      </ol>
+    </nav>
+
+    <!-- SECTION 1: FOUNDATIONS OF EMOTIONAL EXPERIENCE DESIGN -->
+    <section class="section" id="emotional-foundations">
+      <div class="section-header">
+        <div class="section-num">1</div>
+        <h2 class="section-title">Foundations of Emotional Experience Design</h2>
+      </div>
+      <p>
+        Emotional Experience Design (EED) is a strategic approach focused on creating meaningful and memorable experiences that evoke positive emotions and foster deep connections with customers. It shifts the emphasis from superficial attributes to visceral, lasting brand impressions.
+      </p>
+      <p>
+        The framework operates on a core psychological premise: functional utility alone is no longer enough to maintain business differentiation. EED seeks to create emotionally resonant experiences that go beyond mere functionality or utility, leaving a lasting impression and fostering meaningful relationships between customers and brands.
+      </p>
+
+      <div class="callout">
+        <strong>The Catalyst for Customer Action:</strong> Emotional Experience Design starts with a deep understanding of the emotional drivers and motivations of target customers. This involves conducting systematic research to identify the specific emotions that actively influence customer behavior, preferences, and long-term decision-making processes.
+      </div>
+    </section>
+
+    <hr class="divider">
+
+    <!-- SECTION 2: TACTICAL MAPS & CORE PRINCIPLES -->
+    <section class="section" id="tactical-frameworks">
+      <div class="section-header">
+        <div class="section-num">2</div>
+        <h2 class="section-title">Tactical Mapping and Core Execution Principles</h2>
+      </div>
+      <p>
+        Transforming raw psychological insights into operational reality requires deploying dedicated design tools and human-centric pillars throughout the customer journey:
+      </p>
+
+      <div class="two-col">
+        <div class="driver-card">
+          <div class="driver-card-head">Affective Mapping Systems</div>
+          <div class="driver-card-body">
+            Similar to classic customer journey mapping, EED involves mapping out the emotional journey that customers go through when interacting with a product, service, or brand. This architectural approach includes identifying key touchpoints and moments that trigger specific emotional states along the customer lifecycle.
+          </div>
+        </div>
+        <div class="driver-card">
+          <div class="driver-card-head">Intentional Experience Engineering</div>
+          <div class="driver-card-body">
+            Equipped with insights from emotional mapping, designers can intentionally design experiences to evoke desired emotional responses. This practice relies heavily on using sensory elements, structured storytelling techniques, and empathetic design principles to build experiences that resonate emotionally.
+          </div>
+        </div>
+      </div>
+
+      <p>
+        To build strong emotional connections that encourage customer loyalty, companies should integrate these primary strategies into their design blueprints:
+      </p>
+
+      <div class="three-col">
+        <div class="data-card">
+          <div class="data-card-head">Surprise &amp; Delight</div>
+          <div class="data-card-body">
+            <p>EED seeks to create delightful moments of surprise that exceed customer expectations and leave a lasting impression. These unexpected moments can be strategically infused throughout the customer journey to enhance overall satisfaction and brand affinity.</p>
+          </div>
+        </div>
+        <div class="data-card">
+          <div class="data-card-head">Empathetic Customization</div>
+          <div class="data-card-body">
+            <p>Personalization plays a crucial role in EED, as it allows brands to tailor experiences to individual customer preferences and needs. By demonstrating genuine empathy and an understanding of unique customer circumstances, brands establish meaningful interactions.</p>
+          </div>
+        </div>
+        <div class="data-card">
+          <div class="data-card-head">Value Alignment</div>
+          <div class="data-card-body">
+            <p>EED aims to build strong emotional connections by creating experiences that resonate on a deeper level. This involves aligning core brand values with customer values and cultivating authentic, genuine relationships rather than purely transactional ones.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <hr class="divider">
+
+    <!-- SECTION 3: MEASUREMENT & OPTIMIZATION -->
+    <section class="section" id="measurement-optimization">
+      <div class="section-header">
+        <div class="section-num">3</div>
+        <h2 class="section-title">Measurement, Valuation, and Iterative Optimization</h2>
+      </div>
+      <p>
+        Because emotions are inherently subjective, managing an EED initiative requires grounding qualitative impact in structured evaluation methodologies to track performance over time:
+      </p>
+
+      <ul>
+        <li><strong>Impact Assessment:</strong> To gauge the effectiveness of emotional experience design initiatives, it is essential to measure the emotional impact of experiences on customers. This requires looking past basic operational metrics like speed or transaction volumes.</li>
+        <li><strong>Methodology Frameworks:</strong> Organizations use qualitative research methods, specialized sentiment analysis tools, or emotional engagement metrics to assess emotional responses and overall customer sentiment.</li>
+      </ul>
+
+      <div class="callout">
+        <strong>The Optimization Engine:</strong> Like any other design process, emotional design is inherently iterative and requires continuous refinement and optimization based on ongoing feedback and insights. By listening to customer feedback and monitoring emotional responses, organizations can identify friction areas, adapt to new expectations, and iterate on their design strategies accordingly.
+      </div>
+
+      <div class="takeaway-grid">
+        <div class="takeaway-item">
+          <div class="takeaway-icon">✓</div>
+          <p><strong>Relational Advantage:</strong> Designing for specific emotional responses creates deeper customer connections, moving relationships past basic utility to secure long-term customer advocacy.</p>
+        </div>
+        <div class="takeaway-item">
+          <div class="takeaway-icon">✓</div>
+          <p><strong>Data-Driven Adaptation:</strong> Combining sentiment diagnostics with iterative design adjustments keeps experience strategies aligned with evolving customer motivations.</p>
+        </div>
+      </div>
+    </section>
+
+  </div><!-- /body -->
+
+  <!-- FOOTER -->
+  <div id="footer">
+    <span>MTF Institute – Course Lecture Notes</span>
+    <span>Topic: <span>Emotional Experience Design Architecture</span></span>
+  </div>
+
+</div><!-- /document -->
+
+<script>
+  document.querySelectorAll('#toc a').forEach(link => {
+    link.addEventListener('click', e => {
+      e.preventDefault();
+      const target = document.querySelector(link.getAttribute('href'));
+      if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+  });
+</script>
+</body>
+</html>

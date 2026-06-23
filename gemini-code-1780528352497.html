@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lecture – Employee Experience (EX) &amp; Operational Culture</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Source+Code+Pro:wght@400;600&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --teal: #1a6b72;
+    --teal-dark: #124f54;
+    --teal-light: #e8f4f5;
+    --gold: #c8a84b;
+    --cream: #fdf6ec;
+    --paper: #fffdf9;
+    --ink: #1e1e1e;
+    --muted: #6b6b6b;
+    --border: #d4c9b0;
+    --accent: #e85d2a;
+    --page-width: 820px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: #c8bfaf;
+    background-image: repeating-linear-gradient(
+      45deg, transparent, transparent 10px,
+      rgba(0,0,0,0.015) 10px, rgba(0,0,0,0.015) 20px
+    );
+    font-family: 'Lato', sans-serif;
+    color: var(--ink);
+    min-height: 100vh;
+    padding: 30px 20px 60px;
+  }
+
+  #toolbar {
+    max-width: var(--page-width);
+    margin: 0 auto 18px;
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+  }
+  #toolbar button {
+    background: var(--teal);
+    color: #fff;
+    border: none;
+    padding: 9px 20px;
+    border-radius: 4px;
+    font-family: 'Lato', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: .05em;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    transition: background .2s;
+  }
+  #toolbar button:hover { background: var(--teal-dark); }
+
+  #document {
+    max-width: var(--page-width);
+    margin: 0 auto;
+    background: var(--paper);
+    box-shadow: 0 4px 40px rgba(0,0,0,.25), 0 1px 4px rgba(0,0,0,.15);
+    border-radius: 2px;
+  }
+
+  /* Cover */
+  #cover {
+    background: var(--teal);
+    padding: 64px 64px 56px;
+    position: relative;
+    overflow: hidden;
+  }
+  #cover::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(
+      -45deg, transparent, transparent 18px,
+      rgba(255,255,255,.03) 18px, rgba(255,255,255,.03) 36px
+    );
+  }
+  #cover .badge {
+    display: inline-block;
+    background: var(--gold);
+    color: var(--teal-dark);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    padding: 4px 12px;
+    border-radius: 2px;
+    margin-bottom: 24px;
+    position: relative;
+  }
+  #cover h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 38px;
+    font-weight: 700;
+    color: #fff;
+    line-height: 1.2;
+    position: relative;
+    margin-bottom: 12px;
+  }
+  #cover .subtitle {
+    color: rgba(255,255,255,.65);
+    font-size: 15px;
+    letter-spacing: .04em;
+    position: relative;
+    margin-bottom: 40px;
+  }
+  #cover .meta { display: flex; gap: 32px; position: relative; }
+  #cover .meta-item { color: rgba(255,255,255,.7); font-size: 13px; }
+  #cover .meta-item strong { display: block; color: var(--gold); font-size: 11px; letter-spacing: .1em; text-transform: uppercase; margin-bottom: 3px; }
+
+  #body { padding: 48px 64px 64px; }
+
+  /* TOC */
+  #toc {
+    background: var(--cream);
+    border: 1px solid var(--border);
+    border-left: 4px solid var(--teal);
+    padding: 28px 32px;
+    margin-bottom: 48px;
+    border-radius: 2px;
+  }
+  #toc h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 18px;
+    color: var(--teal-dark);
+    margin-bottom: 18px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--border);
+  }
+  #toc ol { list-style: none; counter-reset: toc-counter; }
+  #toc > ol > li { counter-increment: toc-counter; margin-bottom: 6px; }
+  #toc a {
+    color: var(--teal);
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 700;
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    padding: 4px 6px;
+    border-radius: 3px;
+    transition: background .15s;
+  }
+  #toc a::before {
+    content: counter(toc-counter) ".";
+    color: var(--gold);
+    font-family: 'Playfair Display', serif;
+    font-size: 13px;
+    min-width: 18px;
+  }
+  #toc a:hover { background: rgba(26,107,114,.08); }
+
+  /* Sections */
+  .section { margin-bottom: 52px; scroll-margin-top: 20px; }
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 20px;
+    padding-bottom: 12px;
+    border-bottom: 2px solid var(--teal-light);
+  }
+  .section-num {
+    background: var(--teal);
+    color: #fff;
+    font-family: 'Playfair Display', serif;
+    font-size: 13px;
+    width: 32px; height: 32px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 22px;
+    color: var(--teal-dark);
+    font-weight: 600;
+  }
+
+  p { font-size: 14.5px; line-height: 1.75; color: #2c2c2c; margin-bottom: 14px; }
+  ul { margin-bottom: 14px; padding-left: 20px; }
+  li { font-size: 14.5px; line-height: 1.75; color: #2c2c2c; margin-bottom: 6px; }
+
+  /* Callout */
+  .callout {
+    background: var(--teal-light);
+    border-left: 3px solid var(--teal);
+    padding: 14px 18px;
+    margin: 16px 0;
+    border-radius: 0 4px 4px 0;
+    font-size: 13.5px;
+    line-height: 1.65;
+    color: var(--teal-dark);
+  }
+
+  /* Grids */
+  .three-col { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; margin: 20px 0; }
+  @media (max-width: 680px) { .three-col { grid-template-columns: 1fr; } }
+
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 20px 0; }
+  @media (max-width: 680px) { .two-col { grid-template-columns: 1fr; } }
+
+  /* Data card */
+  .data-card { border: 1px solid var(--border); border-radius: 4px; overflow: hidden; background: var(--paper); }
+  .data-card-head {
+    background: var(--teal);
+    color: #fff;
+    padding: 8px 14px;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: .07em;
+    text-transform: uppercase;
+  }
+  .data-card-body { padding: 12px 14px; font-size: 13.5px; background: var(--cream); }
+  .data-card-body p { font-size: 13.5px; margin-bottom: 0; color: #333; line-height: 1.6; }
+
+  /* Gold driver card */
+  .driver-card { border: 1px solid var(--border); border-radius: 4px; overflow: hidden; margin-bottom: 14px; }
+  .driver-card-head {
+    background: var(--gold);
+    color: var(--teal-dark);
+    padding: 8px 14px;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: .07em;
+    text-transform: uppercase;
+  }
+  .driver-card-body { padding: 13px 16px; font-size: 13.5px; background: var(--cream); line-height: 1.65; color: #333; }
+
+  /* Takeaways */
+  .takeaway-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-top: 16px;
+  }
+  @media (max-width: 680px) { .takeaway-grid { grid-template-columns: 1fr; } }
+  .takeaway-item {
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+    background: var(--cream);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 12px 14px;
+  }
+  .takeaway-icon {
+    background: var(--gold);
+    color: var(--teal-dark);
+    font-size: 10px;
+    font-weight: 700;
+    width: 22px; height: 22px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+  .takeaway-item p { font-size: 13px; line-height: 1.55; margin-bottom: 0; color: #2c2c2c; }
+
+  .divider { border: none; border-top: 1px solid var(--border); margin: 40px 0; }
+
+  #footer {
+    background: var(--teal-dark);
+    color: rgba(255,255,255,.5);
+    font-size: 12px;
+    padding: 18px 64px;
+    letter-spacing: .04em;
+    display: flex;
+    justify-content: space-between;
+  }
+  #footer span { color: var(--gold); }
+
+  @media print {
+    body { background: white; padding: 0; }
+    #toolbar { display: none; }
+    #document { box-shadow: none; max-width: 100%; }
+    .section { page-break-inside: avoid; }
+  }
+</style>
+</head>
+<body>
+
+<div id="toolbar">
+  <button onclick="window.print()">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+    Export / Print as PDF
+  </button>
+</div>
+
+<div id="document">
+
+  <!-- COVER -->
+  <div id="cover">
+    <div class="badge">MTF Institute of Management, Technology &amp; Finance</div>
+    <h1>Employee Experience (EX) Architecture</h1>
+    <p class="subtitle">Module 11: Internal Journey Mapping, Workforce Engagement, and Symmetric Experience Delivery</p>
+    <div class="meta">
+      <div class="meta-item"><strong>Lecturer</strong>Alex</div>
+      <div class="meta-item"><strong>Focus Area</strong>Organizational Culture &amp; Strategy</div>
+      <div class="meta-item"><strong>File Reference</strong>Employee+Experience+Principles.pptx.pdf</div>
+    </div>
+  </div>
+
+  <!-- BODY -->
+  <div id="body">
+
+    <!-- TOC -->
+    <nav id="toc">
+      <h2>Table of Contents</h2>
+      <ol>
+        <li><a href="#ex-foundations">Foundations of Employee Experience</a></li>
+        <li><a href="#symmetric-impact">The Symmetric Impact Loop: Employee to Customer</a></li>
+        <li><a href="#strategic-pillars">Strategic Pillars for Optimizing the Workforce Environment</a></li>
+      </ol>
+    </nav>
+
+    <!-- SECTION 1: FOUNDATIONS OF EMPLOYEE EXPERIENCE -->
+    <section class="section" id="ex-foundations">
+      <div class="section-header">
+        <div class="section-num">1</div>
+        <h2 class="section-title">Foundations of Employee Experience</h2>
+      </div>
+      <p>
+        Employee experience encompasses the journey and perception of employees throughout their interactions with an organization. Rather than viewing employment as a series of isolated human resource tasks, this approach addresses the holistic perception and journey of an employee within the workplace environment.
+      </p>
+      <p>
+        By focusing on this internal environment, management shifts from standard enforcement to active experience design. It emphasizes the structural importance of creating positive experiences for employees to foster engagement, satisfaction, and productivity by prioritizing employee experience.
+      </p>
+
+      <div class="callout">
+        <strong>The Internal Foundation:</strong> By deliberately designing and prioritizing the internal journey, organizations can create a supportive and fulfilling work environment that empowers employees to deliver exceptional customer experiences.
+      </div>
+    </section>
+
+    <hr class="divider">
+
+    <!-- SECTION 2: THE SYMMETRIC IMPACT LOOP -->
+    <section class="section" id="symmetric-impact">
+      <div class="section-header">
+        <div class="section-num">2</div>
+        <h2 class="section-title">The Symmetric Impact Loop: Employee to Customer</h2>
+      </div>
+      <p>
+        Modern operations strategy relies heavily on the concept of experience symmetry: the quality of external customer interactions is bounded by the quality of internal employee experiences.
+      </p>
+
+      <div class="two-col">
+        <div class="driver-card">
+          <div class="driver-card-head">Direct Satisfaction Correlation</div>
+          <div class="driver-card-body">
+            Employee engagement and satisfaction directly impact customer satisfaction and loyalty. Engaged and satisfied employees are naturally more motivated to deliver high-quality service, resulting in improved customer interactions and stronger brand relationships.
+          </div>
+        </div>
+        <div class="driver-card">
+          <div class="driver-card-head">Downstream Commercial Returns</div>
+          <div class="driver-card-body">
+            Positive employee experiences translate into positive customer experiences, leading to increased customer loyalty, retention, and brand advocacy. Cultivating the internal layer acts as an effective driver for external market growth.
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <hr class="divider">
+
+    <!-- SECTION 3: STRATEGIC PILLARS FOR EX OPTIMIZATION -->
+    <section class="section" id="strategic-pillars">
+      <div class="section-header">
+        <div class="section-num">3</div>
+        <h2 class="section-title">Strategic Pillars for Optimizing the Workforce Environment</h2>
+      </div>
+      <p>
+        Enhancing employee experiences involves implementing structured corporate strategies to support employee well-being, engagement, and professional development. These initiatives are built upon three core operational areas:
+      </p>
+
+      <div class="three-col">
+        <div class="data-card">
+          <div class="data-card-head">Training &amp; Development</div>
+          <div class="data-card-body">
+            <p>Providing formal opportunities for learning, growth, and skill development through targeted training programs, interactive workshops, and structured internal mentorship models.</p>
+          </div>
+        </div>
+        <div class="data-card">
+          <div class="data-card-head">Recognition Programs</div>
+          <div class="data-card-body">
+            <p>Systematically acknowledging and rewarding employees for their daily contributions and achievements to boost overall organizational morale and individual motivation.</p>
+          </div>
+        </div>
+        <div class="data-card">
+          <div class="data-card-head">Environment Enhancements</div>
+          <div class="data-card-body">
+            <p>Creating a supportive and inclusive work environment with modern amenities, flexible work arrangements, and clear opportunities for collaboration and social connection.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="callout">
+        <strong>The Enterprise Value Return:</strong> By investing in strategies to improve employee experience, organizations can cultivate a positive workplace culture, increase employee engagement and satisfaction, and ultimately deliver better customer experiences that drive long-term business success.
+      </div>
+
+      <div class="takeaway-grid">
+        <div class="takeaway-item">
+          <div class="takeaway-icon">✓</div>
+          <p><strong>Cultural Sustainability:</strong> Designing healthy workplace spaces reduces friction, aligns multi-departmental goals, and builds corporate resilience.</p>
+        </div>
+        <div class="takeaway-item">
+          <div class="takeaway-icon">✓</div>
+          <p><strong>Symmetric Advantage:</strong> Organizations that treat internal employee pathways with the same discipline as customer funnels see measurable gains in retention and market advocacy.</p>
+        </div>
+      </div>
+    </section>
+
+  </div><!-- /body -->
+
+  <!-- FOOTER -->
+  <div id="footer">
+    <span>MTF Institute – Course Lecture Notes</span>
+    <span>Topic: <span>Employee Experience Architecture</span></span>
+  </div>
+
+</div><!-- /document -->
+
+<script>
+  document.querySelectorAll('#toc a').forEach(link => {
+    link.addEventListener('click', e => {
+      e.preventDefault();
+      const target = document.querySelector(link.getAttribute('href'));
+      if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+  });
+</script>
+</body>
+</html>

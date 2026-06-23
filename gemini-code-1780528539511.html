@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lecture – Assessing the Current State of UX</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Source+Code+Pro:wght@400;600&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --teal: #1a6b72;
+    --teal-dark: #124f54;
+    --teal-light: #e8f4f5;
+    --gold: #c8a84b;
+    --cream: #fdf6ec;
+    --paper: #fffdf9;
+    --ink: #1e1e1e;
+    --muted: #6b6b6b;
+    --border: #d4c9b0;
+    --accent: #e85d2a;
+    --page-width: 820px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: #c8bfaf;
+    background-image: repeating-linear-gradient(
+      45deg, transparent, transparent 10px,
+      rgba(0,0,0,0.015) 10px, rgba(0,0,0,0.015) 20px
+    );
+    font-family: 'Lato', sans-serif;
+    color: var(--ink);
+    min-height: 100vh;
+    padding: 30px 20px 60px;
+  }
+
+  #toolbar {
+    max-width: var(--page-width);
+    margin: 0 auto 18px;
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+  }
+  #toolbar button {
+    background: var(--teal);
+    color: #fff;
+    border: none;
+    padding: 9px 20px;
+    border-radius: 4px;
+    font-family: 'Lato', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: .05em;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    transition: background .2s;
+  }
+  #toolbar button:hover { background: var(--teal-dark); }
+
+  #document {
+    max-width: var(--page-width);
+    margin: 0 auto;
+    background: var(--paper);
+    box-shadow: 0 4px 40px rgba(0,0,0,.25), 0 1px 4px rgba(0,0,0,.15);
+    border-radius: 2px;
+  }
+
+  /* Cover */
+  #cover {
+    background: var(--teal);
+    padding: 64px 64px 56px;
+    position: relative;
+    overflow: hidden;
+  }
+  #cover::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(
+      -45deg, transparent, transparent 18px,
+      rgba(255,255,255,.03) 18px, rgba(255,255,255,.03) 36px
+    );
+  }
+  #cover .badge {
+    display: inline-block;
+    background: var(--gold);
+    color: var(--teal-dark);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    padding: 4px 12px;
+    border-radius: 2px;
+    margin-bottom: 24px;
+    position: relative;
+  }
+  #cover h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 38px;
+    font-weight: 700;
+    color: #fff;
+    line-height: 1.2;
+    position: relative;
+    margin-bottom: 12px;
+  }
+  #cover .subtitle {
+    color: rgba(255,255,255,.65);
+    font-size: 15px;
+    letter-spacing: .04em;
+    position: relative;
+    margin-bottom: 40px;
+  }
+  #cover .meta { display: flex; gap: 32px; position: relative; }
+  #cover .meta-item { color: rgba(255,255,255,.7); font-size: 13px; }
+  #cover .meta-item strong { display: block; color: var(--gold); font-size: 11px; letter-spacing: .1em; text-transform: uppercase; margin-bottom: 3px; }
+
+  #body { padding: 48px 64px 64px; }
+
+  /* TOC */
+  #toc {
+    background: var(--cream);
+    border: 1px solid var(--border);
+    border-left: 4px solid var(--teal);
+    padding: 28px 32px;
+    margin-bottom: 48px;
+    border-radius: 2px;
+  }
+  #toc h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 18px;
+    color: var(--teal-dark);
+    margin-bottom: 18px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--border);
+  }
+  #toc ol { list-style: none; counter-reset: toc-counter; }
+  #toc > ol > li { counter-increment: toc-counter; margin-bottom: 6px; }
+  #toc a {
+    color: var(--teal);
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 700;
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    padding: 4px 6px;
+    border-radius: 3px;
+    transition: background .15s;
+  }
+  #toc a::before {
+    content: counter(toc-counter) ".";
+    color: var(--gold);
+    font-family: 'Playfair Display', serif;
+    font-size: 13px;
+    min-width: 18px;
+  }
+  #toc a:hover { background: rgba(26,107,114,.08); }
+
+  /* Sections */
+  .section { margin-bottom: 52px; scroll-margin-top: 20px; }
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 20px;
+    padding-bottom: 12px;
+    border-bottom: 2px solid var(--teal-light);
+  }
+  .section-num {
+    background: var(--teal);
+    color: #fff;
+    font-family: 'Playfair Display', serif;
+    font-size: 13px;
+    width: 32px; height: 32px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 22px;
+    color: var(--teal-dark);
+    font-weight: 600;
+  }
+
+  p { font-size: 14.5px; line-height: 1.75; color: #2c2c2c; margin-bottom: 14px; }
+  ul { margin-bottom: 14px; padding-left: 20px; }
+  li { font-size: 14.5px; line-height: 1.75; color: #2c2c2c; margin-bottom: 6px; }
+
+  /* Callout */
+  .callout {
+    background: var(--teal-light);
+    border-left: 3px solid var(--teal);
+    padding: 14px 18px;
+    margin: 16px 0;
+    border-radius: 0 4px 4px 0;
+    font-size: 13.5px;
+    line-height: 1.65;
+    color: var(--teal-dark);
+  }
+
+  /* Grids */
+  .three-col { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; margin: 20px 0; }
+  @media (max-width: 680px) { .three-col { grid-template-columns: 1fr; } }
+
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 20px 0; }
+  @media (max-width: 680px) { .two-col { grid-template-columns: 1fr; } }
+
+  /* Data card */
+  .data-card { border: 1px solid var(--border); border-radius: 4px; overflow: hidden; background: var(--paper); }
+  .data-card-head {
+    background: var(--teal);
+    color: #fff;
+    padding: 8px 14px;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: .07em;
+    text-transform: uppercase;
+  }
+  .data-card-body { padding: 12px 14px; font-size: 13.5px; background: var(--cream); }
+  .data-card-body p { font-size: 13.5px; margin-bottom: 0; color: #333; line-height: 1.6; }
+
+  /* Gold driver card */
+  .driver-card { border: 1px solid var(--border); border-radius: 4px; overflow: hidden; margin-bottom: 14px; }
+  .driver-card-head {
+    background: var(--gold);
+    color: var(--teal-dark);
+    padding: 8px 14px;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: .07em;
+    text-transform: uppercase;
+  }
+  .driver-card-body { padding: 13px 16px; font-size: 13.5px; background: var(--cream); line-height: 1.65; color: #333; }
+
+  /* Takeaways */
+  .takeaway-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-top: 16px;
+  }
+  @media (max-width: 680px) { .takeaway-grid { grid-template-columns: 1fr; } }
+  .takeaway-item {
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+    background: var(--cream);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 12px 14px;
+  }
+  .takeaway-icon {
+    background: var(--gold);
+    color: var(--teal-dark);
+    font-size: 10px;
+    font-weight: 700;
+    width: 22px; height: 22px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+  .takeaway-item p { font-size: 13px; line-height: 1.55; margin-bottom: 0; color: #2c2c2c; }
+
+  .divider { border: none; border-top: 1px solid var(--border); margin: 40px 0; }
+
+  #footer {
+    background: var(--teal-dark);
+    color: rgba(255,255,255,.5);
+    font-size: 12px;
+    padding: 18px 64px;
+    letter-spacing: .04em;
+    display: flex;
+    justify-content: space-between;
+  }
+  #footer span { color: var(--gold); }
+
+  @media print {
+    body { background: white; padding: 0; }
+    #toolbar { display: none; }
+    #document { box-shadow: none; max-width: 100%; }
+    .section { page-break-inside: avoid; }
+  }
+</style>
+</head>
+<body>
+
+<div id="toolbar">
+  <button onclick="window.print()">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+    Export / Print as PDF
+  </button>
+</div>
+
+<div id="document">
+
+  <!-- COVER -->
+  <div id="cover">
+    <div class="badge">MTF Institute of Management, Technology &amp; Finance</div>
+    <h1>Assessing the Current State of UX</h1>
+    <p class="subtitle">Module 13: Usability Auditing, Multi-Channel Data Gathering, and Journey Mapping Case Evaluation</p>
+    <div class="meta">
+      <div class="meta-item"><strong>Lecturer</strong>Alex</div>
+      <div class="meta-item"><strong>Focus Area</strong>Customer Experience Architecture</div>
+      <div class="meta-item"><strong>File Reference</strong>Assessing+Current+State+of+UX.pdf</div>
+    </div>
+  </div>
+
+  <!-- BODY -->
+  <div id="body">
+
+    <!-- TOC -->
+    <nav id="toc">
+      <h2>Table of Contents</h2>
+      <ol>
+        <li><a href="#audit-importance">The Strategic Role of a UX Audit</a></li>
+        <li><a href="#audit-methodology">Six-Step Execution Framework</a></li>
+        <li><a href="#case-study">B2C Retail Banking Case Evaluation</a></li>
+      </ol>
+    </nav>
+
+    <!-- SECTION 1: THE STRATEGIC ROLE OF A UX AUDIT -->
+    <section class="section" id="audit-importance">
+      <div class="section-header">
+        <div class="section-num">1</div>
+        <h2 class="section-title">The Strategic Role of a UX Audit</h2>
+      </div>
+      <p>
+        As a newly appointed CEM Director, your first order of business is to gain a deep understanding of the current state of your organization's user experience (UX)[cite: 1]. This requires conducting a thorough UX audit—a systematic evaluation of your existing customer journeys, touchpoints, and UX design[cite: 1]. This foundational review serves as the baseline for your comprehensive CEM strategy[cite: 1].
+      </p>
+      <p>
+        An enterprise-grade UX audit provides critical utility across five operational strategic imperatives:
+      </p>
+      <ul>
+        <li><strong>Identify Pain Points:</strong> It uncovers specific customer friction areas, ranging from confusing web navigation to operational bottlenecks in physical centers[cite: 1].</li>
+        <li><strong>Uncover Opportunities:</strong> The audit opens paths to simplify steps, personalize experiences, or improve proactive messaging[cite: 1].</li>
+        <li><strong>Benchmark Performance:</strong> Comparing your interface designs with industry standards helps evaluate functional competitive gaps[cite: 1].</li>
+        <li><strong>Prioritize Investments:</strong> It focuses software development budgets where enhancements will yield the highest customer lifetime value[cite: 1].</li>
+        <li><strong>Measure Progress:</strong> It establishes a clear metrics baseline to evaluate the long-term effectiveness of future CEM changes[cite: 1].</li>
+      </ul>
+
+      <div class="driver-card">
+        <div class="driver-card-head">The Five Core Components of a Comprehensive UX Audit</div>
+        <div class="driver-card-body">
+          <p><strong>1. Heuristic Evaluation:</strong> Reviewing digital systems against usability rules to find design errors and consistency gaps[cite: 1].</p>
+          <p><strong>2. Customer Journey Mapping:</strong> Building visual maps of customer steps to balance internal processes with real user pathways[cite: 1].</p>
+          <p><strong>3. User Research:</strong> Gathering qualitative and quantitative user views via targeted surveys, interviews, and usability tests[cite: 1].</p>
+          <p><strong>4. Competitive Analysis:</strong> Evaluating competitor user journeys to identify industry best practices and whitespace opportunities[cite: 1].</p>
+          <p><strong>5. Analytics Data Review:</strong> Examining web usage and CRM system data to quantify dropout points and track conversion paths[cite: 1].</p>
+        </div>
+      </div>
+    </section>
+
+    <hr class="divider">
+
+    <!-- SECTION 2: SIX-STEP EXECUTION FRAMEWORK -->
+    <section class="section" id="audit-methodology">
+      <div class="section-header">
+        <div class="section-num">2</div>
+        <h2 class="section-title">Six-Step Execution Framework</h2>
+      </div>
+      <p>
+        Conducting an effective UX audit requires following a disciplined, structured sequence to move from raw data gathering to continuous operational deployment:
+      </p>
+
+      <div class="three-col">
+        <div class="data-card">
+          <div class="data-card-head">1. Define Objectives</div>
+          <div class="data-card-body">
+            <p>Establish clear project goals, focusing on target outcomes like reducing customer churn, boosting product conversion, or raising overall satisfaction scores[cite: 1].</p>
+          </div>
+        </div>
+        <div class="data-card">
+          <div class="data-card-head">2. Map Key Touchpoints</div>
+          <div class="data-card-body">
+            <p>Categorize your channel touchpoints across digital apps, brick-and-mortar storefronts, and direct team interactions[cite: 1].</p>
+          </div>
+        </div>
+        <div class="data-card">
+          <div class="data-card-head">3. Gather Multi-Source Data</div>
+          <div class="data-card-body">
+            <p>Collect user feedback alongside technical platform analytics, CRM histories, and competitor bench-marking data[cite: 1].</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="three-col">
+        <div class="data-card">
+          <div class="data-card-head">4. Analyze &amp; Prioritize</div>
+          <div class="data-card-body">
+            <p>Isolate recurring themes where customers encounter friction, sorting by total impact on customer loyalty and revenue performance[cite: 1].</p>
+          </div>
+        </div>
+        <div class="data-card">
+          <div class="data-card-head">5. Formulate SMART Plans</div>
+          <div class="data-card-body">
+            <p>Build actionable, touchpoint-specific design recommendations that are Specific, Measurable, Achievable, Relevant, and Time-bound[cite: 1].</p>
+          </div>
+        </div>
+        <div class="data-card">
+          <div class="data-card-head">6. Implement &amp; Iterate</div>
+          <div class="data-card-body">
+            <p>Deploy design changes or support training updates, then monitor performance metrics to drive ongoing optimization[cite: 1].</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <hr class="divider">
+
+    <!-- SECTION 3: CASE STUDY: B2C BANKING LOAN APPLICATION -->
+    <section class="section" id="case-study">
+      <div class="section-header">
+        <div class="section-num">3</div>
+        <h2 class="section-title">Case Study: B2C Banking Loan Application</h2>
+      </div>
+      <p>
+        To understand how Customer Journey Mapping works in practice, we evaluate an online retail banking loan journey through a standard consumer persona[cite: 1]:
+      </p>
+
+      <div class="callout">
+        <strong>Customer Persona Focus – Sarah (Age 35):</strong> Full-time professional seeking a personal loan to consolidate debt[cite: 1]. She is highly tech-savvy and prefers online banking channels[cite: 1].
+      </div>
+
+      <table style="width: 100%; border-collapse: collapse; margin: 20px 0; background: var(--paper); border: 1px solid var(--border); font-size: 13.5px;">
+        <thead>
+          <tr style="background: var(--teal); color: white; text-align: left;">
+            <th style="padding: 10px; border: 1px solid var(--border);">Journey Stage</th>
+            <th style="padding: 10px; border: 1px solid var(--border);">Active User Touchpoints</th>
+            <th style="padding: 10px; border: 1px solid var(--border);">Identified Journey Pain Points</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td style="padding: 10px; border: 1px solid var(--border); font-weight: bold; background: var(--cream);">1. Pre-Application[cite: 1]</td>
+            <td style="padding: 10px; border: 1px solid var(--border);">Digital ads, website research, loan calculator, FAQs[cite: 1].</td>
+            <td style="padding: 10px; border: 1px solid var(--border); color: var(--accent);">Confusing navigation, unclear criteria, hidden contact info[cite: 1].</td>
+          </tr>
+          <tr style="background: var(--teal-light);">
+            <td style="padding: 10px; border: 1px solid var(--border); font-weight: bold; background: var(--cream);">2. Application[cite: 1]</td>
+            <td style="padding: 10px; border: 1px solid var(--border);">Form input, financial data upload, info verification[cite: 1].</td>
+            <td style="padding: 10px; border: 1px solid var(--border); color: var(--accent);">Lengthy form layout, tech glitches, missing progress trackers[cite: 1].</td>
+          </tr>
+          <tr>
+            <td style="padding: 10px; border: 1px solid var(--border); font-weight: bold; background: var(--cream);">3. Decision/Approval[cite: 1]</td>
+            <td style="padding: 10px; border: 1px solid var(--border);">SMS/Email notifications, secure portal offer review[cite: 1].</td>
+            <td style="padding: 10px; border: 1px solid var(--border); color: var(--accent);">Long wait times, opaque decision rules, complex legal language[cite: 1].</td>
+          </tr>
+          <tr style="background: var(--teal-light);">
+            <td style="padding: 10px; border: 1px solid var(--border); font-weight: bold; background: var(--cream);">4. Onboarding[cite: 1]</td>
+            <td style="padding: 10px; border: 1px solid var(--border);">E-signatures, autopay setup, welcome kit receipt[cite: 1].</td>
+            <td style="padding: 10px; border: 1px solid var(--border); color: var(--accent);">Confusing repayment rules, boilerplate messaging, support friction[cite: 1].</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <p>
+        By isolating these stage-specific challenges, the retail banking team can prioritize concrete product fixes[cite: 1]:
+      </p>
+
+      <div class="takeaway-grid">
+        <div class="takeaway-item">
+          <div class="takeaway-icon">✓</div>
+          <p><strong>Front-End Simplification:</strong> Cleaning up top-of-funnel web navigation and providing transparent loan eligibility checkers speeds up user self-selection[cite: 1].</p>
+        </div>
+        <div class="takeaway-item">
+          <div class="takeaway-icon">✓</div>
+          <p><strong>Process Transparency:</strong> Streamlining application fields, resolving software bugs, and showing clear milestone steps reduces mid-form abandonment[cite: 1].</p>
+        </div>
+      </div>
+    </section>
+
+  </div><!-- /body -->
+
+  <!-- FOOTER -->
+  <div id="footer">
+    <span>MTF Institute – Course Lecture Notes</span>
+    <span>Topic: <span>UX Audit &amp; Journey Assessment Frameworks</span></span>
+  </div>
+
+</div><!-- /document -->
+
+<script>
+  document.querySelectorAll('#toc a').forEach(link => {
+    link.addEventListener('click', e => {
+      e.preventDefault();
+      const target = document.querySelector(link.getAttribute('href'));
+      if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+  });
+</script>
+</body>
+</html>

@@ -1,0 +1,693 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lecture Handbook – Customer Experience Management Masterclass</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Source+Code+Pro:wght@400;600&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --teal: #1a6b72;
+    --teal-dark: #124f54;
+    --teal-light: #e8f4f5;
+    --gold: #c8a84b;
+    --cream: #fdf6ec;
+    --paper: #fffdf9;
+    --ink: #1e1e1e;
+    --muted: #6b6b6b;
+    --border: #d4c9b0;
+    --accent: #e85d2a;
+    --page-width: 820px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: #c8bfaf;
+    background-image: repeating-linear-gradient(
+      45deg, transparent, transparent 10px,
+      rgba(0,0,0,0.015) 10px, rgba(0,0,0,0.015) 20px
+    );
+    font-family: 'Lato', sans-serif;
+    color: var(--ink);
+    min-height: 100vh;
+    padding: 30px 20px 60px;
+  }
+
+  #toolbar {
+    max-width: var(--page-width);
+    margin: 0 auto 18px;
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+  }
+  #toolbar button {
+    background: var(--teal);
+    color: #fff;
+    border: none;
+    padding: 9px 20px;
+    border-radius: 4px;
+    font-family: 'Lato', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: .05em;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    transition: background .2s;
+  }
+  #toolbar button:hover { background: var(--teal-dark); }
+
+  #document {
+    max-width: var(--page-width);
+    margin: 0 auto;
+    background: var(--paper);
+    box-shadow: 0 4px 40px rgba(0,0,0,.25), 0 1px 4px rgba(0,0,0,.15);
+    border-radius: 2px;
+  }
+
+  /* Cover */
+  #cover {
+    background: var(--teal);
+    padding: 64px 64px 56px;
+    position: relative;
+    overflow: hidden;
+  }
+  #cover::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(
+      -45deg, transparent, transparent 18px,
+      rgba(255,255,255,.03) 18px, rgba(255,255,255,.03) 36px
+    );
+  }
+  #cover .badge {
+    display: inline-block;
+    background: var(--gold);
+    color: var(--teal-dark);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    padding: 4px 12px;
+    border-radius: 2px;
+    margin-bottom: 24px;
+    position: relative;
+  }
+  #cover h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 38px;
+    font-weight: 700;
+    color: #fff;
+    line-height: 1.2;
+    position: relative;
+    margin-bottom: 12px;
+  }
+  #cover .subtitle {
+    color: rgba(255,255,255,.65);
+    font-size: 15px;
+    letter-spacing: .04em;
+    position: relative;
+    margin-bottom: 40px;
+  }
+  #cover .meta { display: flex; gap: 32px; position: relative; }
+  #cover .meta-item { color: rgba(255,255,255,.7); font-size: 13px; }
+  #cover .meta-item strong { display: block; color: var(--gold); font-size: 11px; letter-spacing: .1em; text-transform: uppercase; margin-bottom: 3px; }
+
+  #body { padding: 48px 64px 64px; }
+
+  /* TOC */
+  #toc {
+    background: var(--cream);
+    border: 1px solid var(--border);
+    border-left: 4px solid var(--teal);
+    padding: 28px 32px;
+    margin-bottom: 48px;
+    border-radius: 2px;
+  }
+  #toc h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 18px;
+    color: var(--teal-dark);
+    margin-bottom: 18px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--border);
+  }
+  #toc ol { list-style: none; counter-reset: toc-counter; }
+  #toc > ol > li { counter-increment: toc-counter; margin-bottom: 6px; }
+  #toc a {
+    color: var(--teal);
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 700;
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    padding: 4px 6px;
+    border-radius: 3px;
+    transition: background .15s;
+  }
+  #toc a::before {
+    content: counter(toc-counter) ".";
+    color: var(--gold);
+    font-family: 'Playfair Display', serif;
+    font-size: 13px;
+    min-width: 18px;
+  }
+  #toc a:hover { background: rgba(26,107,114,.08); }
+  #toc .toc-sub { list-style: none; padding-left: 26px; margin-top: 4px; }
+  #toc .toc-sub li { margin-bottom: 3px; }
+  #toc .toc-sub a { font-weight: 400; font-size: 13px; color: var(--muted); }
+  #toc .toc-sub a::before { display: none; }
+
+  /* Sections */
+  .section { margin-bottom: 52px; scroll-margin-top: 20px; }
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 20px;
+    padding-bottom: 12px;
+    border-bottom: 2px solid var(--teal-light);
+  }
+  .section-num {
+    background: var(--teal);
+    color: #fff;
+    font-family: 'Playfair Display', serif;
+    font-size: 13px;
+    width: 32px; height: 32px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 22px;
+    color: var(--teal-dark);
+    font-weight: 600;
+  }
+
+  p { font-size: 14.5px; line-height: 1.75; color: #2c2c2c; margin-bottom: 14px; }
+
+  /* Callout */
+  .callout {
+    background: var(--teal-light);
+    border-left: 3px solid var(--teal);
+    padding: 14px 18px;
+    margin: 16px 0;
+    border-radius: 0 4px 4px 0;
+    font-size: 13.5px;
+    line-height: 1.65;
+    color: var(--teal-dark);
+  }
+  .callout strong { color: var(--teal-dark); }
+
+  /* Grids */
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin: 20px 0; }
+  .three-col { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; margin: 20px 0; }
+  @media (max-width: 680px) { .two-col, .three-col { grid-template-columns: 1fr; } }
+
+  /* Data card */
+  .data-card { border: 1px solid var(--border); border-radius: 4px; overflow: hidden; background: var(--paper); }
+  .data-card-head {
+    background: var(--teal);
+    color: #fff;
+    padding: 8px 14px;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: .07em;
+    text-transform: uppercase;
+  }
+  .data-card-body { padding: 12px 14px; font-size: 13.5px; background: var(--cream); }
+  .data-card-body ul { padding-left: 16px; }
+  .data-card-body li { margin-bottom: 5px; color: #333; line-height: 1.55; }
+  .data-card-body p { font-size: 13.5px; margin-bottom: 0; color: #333; line-height: 1.6; }
+
+  /* Gold driver card */
+  .driver-card { border: 1px solid var(--border); border-radius: 4px; overflow: hidden; margin-bottom: 14px; }
+  .driver-card-head {
+    background: var(--gold);
+    color: var(--teal-dark);
+    padding: 8px 14px;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: .07em;
+    text-transform: uppercase;
+  }
+  .driver-card-body { padding: 13px 16px; font-size: 13.5px; background: var(--cream); line-height: 1.65; color: #333; }
+  .driver-card-body ul { padding-left: 18px; }
+  .driver-card-body li { margin-bottom: 4px; }
+
+  /* Flow list */
+  .flow-list { list-style: none; padding: 0; margin: 16px 0; }
+  .flow-list li {
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--border);
+    font-size: 13.5px;
+    line-height: 1.6;
+    color: #2c2c2c;
+  }
+  .flow-list li:last-child { border-bottom: none; }
+  .flow-num {
+    background: var(--teal);
+    color: #fff;
+    font-family: 'Playfair Display', serif;
+    font-size: 11px;
+    font-weight: 700;
+    min-width: 26px; height: 26px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+
+  /* Takeaways */
+  .takeaway-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-top: 16px;
+  }
+  @media (max-width: 680px) { .takeaway-grid { grid-template-columns: 1fr; } }
+  .takeaway-item {
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+    background: var(--cream);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 12px 14px;
+  }
+  .takeaway-icon {
+    background: var(--gold);
+    color: var(--teal-dark);
+    font-size: 10px;
+    font-weight: 700;
+    width: 22px; height: 22px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+  .takeaway-item p { font-size: 13px; line-height: 1.55; margin-bottom: 0; color: #2c2c2c; }
+
+  .divider { border: none; border-top: 1px solid var(--border); margin: 40px 0; }
+
+  h3.sub {
+    font-family: 'Playfair Display', serif;
+    font-size: 16px;
+    color: var(--teal-dark);
+    margin: 24px 0 12px;
+    padding-left: 12px;
+    border-left: 3px solid var(--gold);
+  }
+
+  .inline-badge {
+    background: var(--teal-light);
+    color: var(--teal-dark);
+    padding: 2px 6px;
+    border-radius: 3px;
+    font-size: 12px;
+    font-weight: 700;
+  }
+
+  #footer {
+    background: var(--teal-dark);
+    color: rgba(255,255,255,.5);
+    font-size: 12px;
+    padding: 18px 64px;
+    letter-spacing: .04em;
+    display: flex;
+    justify-content: space-between;
+  }
+  #footer span { color: var(--gold); }
+
+  @media print {
+    body { background: white; padding: 0; }
+    #toolbar { display: none; }
+    #document { box-shadow: none; max-width: 100%; }
+    .section { page-break-inside: avoid; }
+  }
+</style>
+</head>
+<body>
+
+<div id="toolbar">
+  <button onclick="window.print()">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+    Export / Print as PDF
+  </button>
+</div>
+
+<div id="document">
+
+  <!-- COVER -->
+  <div id="cover">
+    <div class="badge">MTF Institute of Management, Technology &amp; Finance</div>
+    <h1>Customer Experience Management</h1>
+    <p class="subtitle">Unlocking the Power of Customer Experience — Complete Masterclass Syllabus</p>
+    <div class="meta">
+      <div class="meta-item"><strong>Faculty Guide</strong>Alex</div>
+      <div class="meta-item"><strong>Curriculum</strong>Full Strategy Roadmap</div>
+      <div class="meta-item"><strong>Published</strong>May 2024</div>
+    </div>
+  </div>
+
+  <!-- BODY -->
+  <div id="body">
+
+    <!-- TOC -->
+    <nav id="toc">
+      <h2>Curriculum Strategy Matrix</h2>
+      <ol>
+        <li><a href="#orientation">Course Introduction &amp; Core Objectives</a></li>
+        <li><a href="#foundations">Theoretical Pillars &amp; Design Principles</a></li>
+        <li><a href="#journey-frameworks">High-Level Frameworks &amp; Journey Mapping</a></li>
+        <li><a href="#segmentation-personas">Customer Segmentation &amp; Persona Architecture</a></li>
+        <li><a href="#recovery-blueprinting">Service Recovery, Process Design &amp; Analytical Frameworks</a></li>
+        <li><a href="#program-benefits">Masterclass Engagement &amp; Practical Benefits</a></li>
+      </ol>
+    </nav>
+
+    <!-- SECTION 1: ORIENTATION -->
+    <section class="section" id="orientation">
+      <div class="section-header">
+        <div class="section-num">1</div>
+        <h2 class="section-title">Course Introduction &amp; Core Objectives</h2>
+      </div>
+      <p>
+        Welcome to this comprehensive short course from the <strong>MTF Institute of Management, Technology &amp; Finance</strong>[cite: 3]. Designed and presented by Alex—a lecturer and research consultant—this program explores the critical role of customer experience (CX) in shaping modern corporate ecosystems. In today's highly saturated and digitally connected markets, exceptional service execution serves as a vital strategic engine for long-term brand equity, loyalty, and sustainable revenue growth.
+      </p>
+      
+      <h3 class="sub">Primary Learning Outcomes</h3>
+      <p>The academic curriculum is structured around three foundational objectives designed to build immediate operational capabilities:</p>
+      <ul class="flow-list">
+        <li>
+          <div class="flow-num">1</div>
+          <div><strong>Master Core Fundamentals:</strong> Build a clear, theoretical understanding of Customer Experience Management (CX) frameworks and basic concepts[cite: 3].</div>
+        </li>
+        <li>
+          <div class="flow-num">2</div>
+          <div><strong>Analyze Design Principles:</strong> Evaluate the core tenets that dictate how users perceive brand actions and build cross-functional journey maps[cite: 3].</div>
+        </li>
+        <li>
+          <div class="flow-num">3</div>
+          <div><strong>Deploy Strategic Tools:</strong> Delve deep into high-level organizational frameworks and practical strategy tools to optimize consumer touchpoints[cite: 3].</div>
+        </li>
+      </ul>
+    </section>
+
+    <hr class="divider">
+
+    <!-- SECTION 2: FOUNDATIONS -->
+    <section class="section" id="foundations">
+      <div class="section-header">
+        <div class="section-num">2</div>
+        <h2 class="section-title">Theoretical Pillars &amp; Design Principles</h2>
+      </div>
+      <p>
+        Customer Experience Management shifts your operations from transactional service models to intentional, relationship-focused experience design. It systematically orchestrates every milestone across the user lifecycle[cite: 3].
+      </p>
+
+      <div class="callout">
+        <strong>Strategic Definition:</strong> CXM is the deliberate practice of designing, structuring, and supervising every single brand interaction to generate positive, memorable experiences across the entire user journey[cite: 3]. This systematic approach establishes immediate competitive differentiation, builds customer retention, and fuels growth[cite: 3].
+      </div>
+
+      <div class="two-col">
+        <div class="driver-card">
+          <div class="driver-card-head">Theoretical CX Principles</div>
+          <div class="driver-card-body">
+            <ul>
+              <li><strong>Personalization:</strong> Tailoring interactions to individual needs[cite: 3].</li>
+              <li><strong>Consistency:</strong> Uniform quality across every channel[cite: 3].</li>
+              <li><strong>Empathy:</strong> Deeply understanding customer emotions[cite: 3].</li>
+              <li><strong>Accessibility:</strong> Frictionless, easy brand interactions[cite: 3].</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="driver-card">
+          <div class="driver-card-head">CX Design Blueprints</div>
+          <div class="driver-card-body">
+            <ul>
+              <li><strong>Personalization Matrix:</strong> Customizing service channels[cite: 3].</li>
+              <li><strong>Simplicity Architecture:</strong> Minimizing cognitive effort[cite: 3].</li>
+              <li><strong>Consistency Benchmarks:</strong> Harmonizing cross-channel experiences[cite: 3].</li>
+              <li><span class="inline-badge">Case Studies</span> Amazon, Apple, and Starbucks[cite: 3].</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <hr class="divider">
+
+    <!-- SECTION 3: JOURNEY FRAMEWORKS -->
+    <section class="section" id="journey-frameworks">
+      <div class="section-header">
+        <div class="section-num">3</div>
+        <h2 class="section-title">High-Level Frameworks &amp; Journey Mapping</h2>
+      </div>
+      <p>
+        To move beyond ad-hoc problem solving, organizations use structural frameworks that transform customer feedback into visual, trackable maps of core behavior.
+      </p>
+
+      <h3 class="sub">Customer Journey Mapping Mechanics</h3>
+      <p>
+        A Customer Journey serves as a comprehensive visual representation of the entire end-to-end customer experience[cite: 3]. It maps out the consumer's timeline all the way from initial awareness to post-purchase engagement[cite: 3].
+      </p>
+
+      <div class="three-col">
+        <div class="data-card">
+          <div class="data-card-head">Touchpoint Discovery</div>
+          <div class="data-card-body">
+            Systematically maps every interaction to identify where customers engage with the brand[cite: 3].
+          </div>
+        </div>
+        <div class="data-card">
+          <div class="data-card-head">Friction Point Insights</div>
+          <div class="data-card-body">
+            Reveals underlying user needs, pain points, and critical "moments of truth"[cite: 3].
+          </div>
+        </div>
+        <div class="data-card">
+          <div class="data-card-head">Optimization Focus</div>
+          <div class="data-card-body">
+            Highlights opportunities for personalization, proactive updates, and employee empowerment[cite: 3].
+          </div>
+        </div>
+      </div>
+
+      <h3 class="sub">Customer Service Excellence &amp; Quality Measurement</h3>
+      <p>
+        Service excellence directly shapes customer perception[cite: 3]. It brings together response speed, technical quality, and empathetic support to build long-term retention[cite: 3]. Organizations monitor and grade these workflows using five key metrics:
+      </p>
+      
+      <div class="two-col">
+        <div class="data-card">
+          <div class="data-card-head">The SERVQUAL Measurement Matrix</div>
+          <div class="data-card-body">
+            <ul>
+              <li><strong>Reliability:</strong> Delivering dependable, accurate performance[cite: 3].</li>
+              <li><strong>Responsiveness:</strong> Providing prompt service and quick assistance[cite: 3].</li>
+              <li><strong>Assurance:</strong> Inspiring trust and confidence through expert staff[cite: 3].</li>
+              <li><strong>Empathy:</strong> Giving customers personalized, caring attention[cite: 3].</li>
+              <li><strong>Tangibles:</strong> Managing physical assets, facilities, and digital tools[cite: 3].</li>
+            </ul>
+          </div>
+        </div>
+        <div class="data-card">
+          <div class="data-card-head">Journey Optimization Tools</div>
+          <div class="data-card-body">
+            <ul>
+              <li><strong>Techniques:</strong> Emotional mapping, customer research, and cross-functional design workshops[cite: 3].</li>
+              <li><strong>Diagnostic Toolkit:</strong> Customer feedback surveys, analytics platforms, and user experience testing[cite: 3].</li>
+              <li><strong>Infrastructure:</strong> Journey mapping software, feedback loops, and agile technologies[cite: 3].</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <hr class="divider">
+
+    <!-- SECTION 4: SEGMENTATION & PERSONAS -->
+    <section class="section" id="segmentation-personas">
+      <div class="section-header">
+        <div class="section-num">4</div>
+        <h2 class="section-title">Customer Segmentation &amp; Persona Architecture</h2>
+      </div>
+      <p>
+        Effective personalization relies on smart data categorization. Splitting a broad audience into distinct target segments lets organizations allocate resources efficiently and create tailored marketing campaigns.
+      </p>
+
+      <div class="two-col">
+        <div class="data-card">
+          <div class="data-card-head">Segmentation Models &amp; Benefits</div>
+          <div class="data-card-body">
+            <p><strong>Core Framework Categories:</strong></p>
+            <ul>
+              <li>Demographic (Age, Income, Education)[cite: 3]</li>
+              <li>Psychographic (Values, Lifestyle, Beliefs)[cite: 3]</li>
+              <li>Behavioral (Usage Rates, Brand History)[cite: 3]</li>
+              <li>Geographic (Location, Climate Dynamics)[cite: 3]</li>
+            </ul>
+            <p style="margin-top: 8px;"><strong>Strategic Advantages:</strong> Drives targeted marketing, lowers acquisition costs, improves retention, and lifts customer satisfaction[cite: 3].</p>
+          </div>
+        </div>
+
+        <div class="data-card">
+          <div class="data-card-head">Persona Development Methodology</div>
+          <div class="data-card-body">
+            <p><strong>Definition:</strong> Detailed, fictional profiles representing key target audience segments to help teams design with empathy[cite: 3].</p>
+            <p style="margin-top: 6px;"><strong>The 4-Step Persona Blueprint:</strong></p>
+            <ol style="padding-left: 16px; margin-top: 4px;">
+              <li><strong>Research Phase:</strong> Gather quantitative and qualitative customer data[cite: 3].</li>
+              <li><strong>Trait Identification:</strong> Group recurring behavioral patterns and goals[cite: 3].</li>
+              <li><strong>Profile Creation:</strong> Build realistic fictional personas[cite: 3].</li>
+              <li><strong>Validation:</strong> Match profiles against real-world customer data[cite: 3].</li>
+            </ol>
+            <p style="margin-top: 6px;"><span class="inline-badge">Case Study Focus</span> Deep-dive analysis into Starbucks' persona engine[cite: 3].</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <hr class="divider">
+
+    <!-- SECTION 5: RECOVERY & BLUEPRINTING -->
+    <section class="section" id="recovery-blueprinting">
+      <div class="section-header">
+        <div class="section-num">5</div>
+        <h2 class="section-title">Service Recovery, Process Design &amp; Analytical Frameworks</h2>
+      </div>
+      <p>
+        Operational excellence requires managing both everyday service delivery and unexpected service failures. This module highlights strategies to turn negative situations into loyalty-building moments.
+      </p>
+
+      <h3 class="sub">The Service Recovery Matrix</h3>
+      <p>
+        Service recovery focuses on resolving customer issues effectively after a service failure[cite: 3]. Handling complaints well protects brand reputation, restores trust, and turns frustrated users into brand advocates[cite: 3].
+      </p>
+
+      <div class="three-col">
+        <div class="data-card">
+          <div class="data-card-head">1. The Recovery Pillars</div>
+          <div class="data-card-body">
+            <ul>
+              <li><strong>Apology:</strong> Acknowledge the failure with genuine regret[cite: 3].</li>
+              <li><strong>Compensation:</strong> Provide refunds, discounts, or perks[cite: 3].</li>
+              <li><strong>Resolution:</strong> Fix the issue quickly to stop it from happening again[cite: 3].</li>
+            </ul>
+          </div>
+        </div>
+        <div class="data-card">
+          <div class="data-card-head">2. Action Best Practices</div>
+          <div class="data-card-body">
+            <ul>
+              <li><strong>Active Listening:</strong> Let customers share concerns fully without interruption[cite: 3].</li>
+              <li><strong>Empathize:</strong> Show genuine understanding[cite: 3].</li>
+              <li><strong>Take Ownership:</strong> Accept responsibility and commit to a fix[cite: 3].</li>
+              <li><strong>Follow Up:</strong> Check back to confirm satisfaction[cite: 3].</li>
+            </ul>
+          </div>
+        </div>
+        <div class="data-card">
+          <div class="data-card-head">3. Service Blueprinting</div>
+          <div class="data-card-body">
+            A structured mapping methodology to improve operational efficiency and break down organizational silos[cite: 3]. Steps include:
+            <ul style="margin-top: 4px;">
+              <li>Mapping front-stage and back-stage actions[cite: 3].</li>
+              <li>Identifying support processes and employee roles[cite: 3].</li>
+              <li><span class="inline-badge">Case Study</span> McDonald's assembly design[cite: 3].</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <h3 class="sub">Advanced Analytical Subsystems</h3>
+      <p>
+        To keep experiences aligned with customer expectations, teams must measure performance using both qualitative feedback and quantitative financial metrics.
+      </p>
+
+      <div class="two-col">
+        <div class="driver-card">
+          <div class="driver-card-head">Voice of the Customer (VoC) &amp; EED</div>
+          <div class="driver-card-body">
+            <ul>
+              <li><strong>VoC Pipeline:</strong> Structured data collection, processing, thematic sentiment analysis, and root-cause analysis to surface actionable insights[cite: 3].</li>
+              <li><strong>Emotional Experience Design (EED):</strong> Mapping emotional journeys, designing for deeper human connections, and creating unexpected moments of delight[cite: 3].</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="driver-card">
+          <div class="driver-card-head">Financial Metrics &amp; Employee Alignment</div>
+          <div class="driver-card-body">
+            <ul>
+              <li><strong>LTV vs. CLV:</strong> Lifetime Value (LTV) calculates total historical value over a customer lifecycle[cite: 3]. Customer Lifetime Value (CLV) forecasts future revenue using past behavior and predictive modeling[cite: 3].</li>
+              <li><strong>The EX-CX Link:</strong> Employee Experience (EX) directly drives customer satisfaction[cite: 3]. Engagement increases when backed by professional development, training, and workplace enhancements[cite: 3].</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <hr class="divider">
+
+    <!-- SECTION 6: BENEFITS -->
+    <section class="section" id="program-benefits">
+      <div class="section-header">
+        <div class="section-num">6</div>
+        <h2 class="section-title">Masterclass Engagement &amp; Practical Benefits</h2>
+      </div>
+      <p>
+        This short course blends academic theory with practical application, ensuring you gain insights that can be immediately applied to your business[cite: 3].
+      </p>
+
+      <div class="takeaway-grid">
+        <div class="takeaway-item">
+          <div class="takeaway-icon">✓</div>
+          <p><strong>Comprehensive Material:</strong> Thorough coverage of CX principles, recovery strategies, metrics, and blueprinting[cite: 3].</p>
+        </div>
+        <div class="takeaway-item">
+          <div class="takeaway-icon">✓</div>
+          <p><strong>Real-World Case Studies:</strong> Analyze proven tactics from global leaders like Amazon, Apple, Starbucks, and McDonald's[cite: 3].</p>
+        </div>
+        <div class="takeaway-item">
+          <div class="takeaway-icon">✓</div>
+          <p><strong>Interactive Projects:</strong> Gain practical experience using actual diagnostic toolkits and mapping software[cite: 3].</p>
+        </div>
+        <div class="takeaway-item">
+          <div class="takeaway-icon">✓</div>
+          <p><strong>Career Advancement:</strong> Build high-value skills in experience architecture to drive long-term business growth[cite: 3].</p>
+        </div>
+      </div>
+    </section>
+
+  </div><!-- /body -->
+
+  <!-- FOOTER -->
+  <div id="footer">
+    <span>MTF Institute – Syllabus &amp; Course Notes</span>
+    <span>Syllabus Content: <span>Modules 1–12 Portfolio</span></span>
+  </div>
+
+</div><!-- /document -->
+
+<script>
+  document.querySelectorAll('#toc a').forEach(link => {
+    link.addEventListener('click', e => {
+      e.preventDefault();
+      const target = document.querySelector(link.getAttribute('href'));
+      if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+  });
+</script>
+</body>
+</html>
